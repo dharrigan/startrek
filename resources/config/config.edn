@@ -1,0 +1,5 @@
+;;
+;; Main Configuration
+;;
+{:secrets #include "/var/run/secrets/startrek-secrets-config.edn" ;; externalised and usually "mounted" as a docker/kubernetes secret
+ :runtime-config #include "/config/startrek-runtime-config.edn"} ;; externalised and usually "mounted" as a docker/kubernetes secret

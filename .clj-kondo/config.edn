@@ -1,0 +1,13 @@
+{:skip-comments true
+ :linters {:clojure-lsp/unused-public-var {:exclude #{dev scripts.build}}
+           :refer-all {:exclude [clojure.repl]}
+           :single-key-in {:level :warning}
+           :unsorted-required-namespaces {:level :warning}
+           :unresolved-symbol {:exclude [(expectations.clojure.test/defexpect)
+                                         (honeysql.helpers/defhelper)]}
+           :unresolved-var {:report-duplicates true}
+           :unused-binding {:exclude-destructured-as true}
+           :unused-referred-var {:exclude {clojure.test [is deftest testing]
+                                           expectations.clojure.test [defexpect expect expecting]}}}
+ :lint-as {clojure.core.async/go-loop clojure.core/loop
+           clojure.test.check.generators/let clojure.core/let}}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="10 seconds">
+
+  <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+  <contextName>startrek</contextName>
+
+  <variable name="STARTREK_LOG_LEVEL" value="${STARTREK_LOG_LEVEL:-debug}" />
+  <variable name="ROOT_LOG_LEVEL" value="${ROOT_LOG_LEVEL:-info}" />
+  <variable name="HIKARI_LOG_LEVEL" value="${HIKARI_LOG_LEVEL:-info}" />
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <Pattern>[%boldWhite(%d)] --- [%boldBlue(%-5level)][%boldGreen(%-25.25logger{25})] - %msg%n%rEx</Pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <encoder>
+      <pattern>[%d] --- [%-5level][%-25.25logger{25}] - %msg%n%rEx</pattern>
+    </encoder>
+    <file>/tmp/${CONTEXT_NAME}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <cleanHistoryOnStart>true</cleanHistoryOnStart>
+      <fileNamePattern>/tmp/${CONTEXT_NAME}.log-%d{yyyy-MM-dd}.%i.gz}</fileNamePattern>
+      <maxFileSize>10MB</maxFileSize>
+      <maxHistory>7</maxHistory>
+      <totalSizeCap>0</totalSizeCap>
+    </rollingPolicy>
+  </appender>
+
+  <logger name="startrek" level="${STARTREK_LOG_LEVEL}"/>
+  <logger name="com.zaxxer.hikari" level="${HIKARI_LOG_LEVEL}"/>
+
+  <root level="${ROOT_LOG_LEVEL}">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="FILE"/>
+  </root>
+
+</configuration>

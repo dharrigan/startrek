@@ -1,0 +1,12 @@
+;;
+;; Example Configuration
+;;
+{:secrets {:db {:dbtype "postgres"
+                :dbname "startrek"
+                :host "postgres"
+                :port 5432
+                :username "theborg"
+                :password "resistanceisfutile"}}
+
+ :runtime-config {:jetty {:port 8080}
+                  :jmxmp {:port 5555}}}

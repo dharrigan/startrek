@@ -1,0 +1,142 @@
+= Star Trek Clojure/script Project
+:author: David Harrigan
+:email: dharrigan@gmail.com
+:docinfo: true
+:doctype: book
+:icons: font
+:numbered:
+:sectlinks:
+:sectnums:
+:setanchors:
+:source-highlighter: highlightjs
+:toc:
+:toclevels: 5
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+== Introduction
+
+This is a very small, yet surprisingly complete, example of using
+Clojure to serve up a RESTful API. It uses a variety of technologies
+to demonstrate how this is possible. The project offers a full CRUD
+(Create, Read, Update and Delete) experience over some Star Trek
+starships!
+
+== Features
+
+* CRUD Functionality
+* Exception Handling
+* Internationalisation (i18n)
+* Swagger API
+* Input Validation (using https://github.com/metosin/malli[Malli])
+
+=== Star Trek
+
+This backend is written in Clojure and uses a PostgreSQL database to
+store a list of starships. The technologies in play include:
+
+* https://github.com/metosin/reitit[reitit]
+* https://github.com/seancorfield/next-jdbc[next-jdbc]
+* https://github.com/seancorfield/honeysql[honeysql (v2)]
+* https://github.com/donut-power/system[donut.system]
+* https://github.com/juxt/aero[juxt aero]
+* https://github.com/flyway/flyway[flyway database migration]
+
+A full list of the technologies that are used can be found in the
+`deps.edn` file.
+
+This service also exposes
+https://prometheus.io/docs/introduction/overview/[Prometheus] metrics
+*AND* a JMX endpoint for your enjoyment!
+
+=== Star Trek UI
+
+A companion project is available on
+https://github.com/dharrigan/startrek-ui[github] that exposes a UI
+written in https://clojurescript.org/[ClojureScript]. It's highly
+recommended that you look at that project too and see if you can get
+them both working together! 😀
+
+=== Engage!
+
+There are at least 3 ways to launch this project:
+
+==== Option 1
+
+IMPORTANT: You need to copy the `resources/config/config-example.edn`
+to `resources/config/config-local.edn` and modify, for example, if you
+are connecting to your own PostgreSQL instance.
+
+Fire up your repl using:
+
+* `clj -M:dev`
+
+to load up the `dev` alias defined in the `deps.edn` then
+
+* `(dev/go)`
+
+to start the system.
+
+==== Option 2
+
+IMPORTANT: You need to copy the `resources/config/config-example.edn`
+to `resources/config/config-local.edn` and modify, for example, if you
+are connecting to your own PostgreSQL instance.
+
+IMPORTANT: If you want to use the `.justfile`, you'll need
+https://github.com/casey/just/blob/master/justfile[just] installed.
+It's great btw!
+
+* `just run-local`
+
+or
+
+* `bin/build`
+* `bin/run-local`
+
+==== Option 3
+
+IMPORTANT: You don't need to copy any config file, as the docker
+container is configured to use `config/config-example.edn`, and thus
+this is the one by the application.
+
+IMPORTANT: If you want to use the `.justfile`, you'll need
+https://github.com/casey/just/blob/master/justfile[just] installed.
+It's great btw!
+
+* `just run-docker`
+
+or
+
+* `bin/build`
+* `bin/run-docker`
+
+== License
+
+Find the full https://unlicense.org/[unlicense] in the `UNLICENSE` (and
+`LICENSE`) file, but here's a snippet:
+
+```
+This is free and unencumbered software released into the public domain.
+
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
+```
+
+== Feedback
+
+I welcome feedback. I can usually be found hanging out in the `#clojure-uk`
+channel on https://clojurians.slack.com[Clojurians] Slack. You can also email
+me if you wish :-)
+
+== Finally!
+
+*Live Long and Prosper!*

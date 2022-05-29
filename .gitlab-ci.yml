@@ -1,0 +1,60 @@
+---
+
+image: clojure:openjdk-19-alpine
+
+# Due to a GitLab bug we need to extend the cache for each job
+# rather than rely on a top level cache with a per job policy.
+# https://gitlab.com/gitlab-org/gitlab-runner/issues/2838
+
+.cache:
+  cache:
+    key: "${CI_COMMIT_REF_NAME}"
+    paths:
+      - .cpcache/
+      - /root/.m2/
+    policy: pull-push
+
+stages:
+  - package
+  - publish
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+
+services:
+  - docker:dind
+
+package:
+  extends: .cache
+  stage: package
+  script:
+    - apk add --no-cache just
+    - just build
+  cache:
+    policy: pull
+  artifacts:
+    paths:
+      - target/app.jar
+    expire_in: 1 day
+
+publish:
+  extends: .cache
+  stage: publish
+  dependencies:
+    - package
+  image: docker.harrigan.online/docker:latest
+  variables:
+    DOCKER_CONFIG: /root/.docker
+  before_script:
+    - mkdir -p $DOCKER_CONFIG
+    - echo "$DOCKER_AUTH_CONFIG" > $DOCKER_CONFIG/config.json
+  script:
+    - just imagify publish
+  cache:
+    policy: pull
+  only:
+    - master
+  except:
+    - branches
+  tags:
+    - docker

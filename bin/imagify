@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+#
+# I suggest using `direnv` to manage the environment variables locally.
+#
+# APPLICATION and CONTAINER_REGISTRY can optionally be set beforehand (maybe using direnv?)
+#
+# Shell expansion: https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
+#
+APPLICATION=${APPLICATION:-$(basename $PWD)}
+FULL_IMAGE=$APPLICATION
+
+if [[ $GITHUB_SHA ]]; then # github
+    GIT_SHA_SHORT=$(git rev-parse --short=7 $GITHUB_SHA)
+elif [[ $CI_COMMIT_SHA ]]; then # gitlab
+    GIT_SHA_SHORT=$(git rev-parse --short=7 $CI_COMMIT_SHA)
+else # fallback
+    GIT_SHA_SHORT=$(git rev-parse --short=7 HEAD)
+fi
+
+if [[ "$GITHUB_REF" =~ ^refs/tags.* ]]; then # github
+    GIT_TAG=${GITHUB_REF#refs/tags/}
+    REL_TAG=${GIT_TAG/$APPLICATION-/}
+elif [[ "$CI_COMMIT_TAG" ]]; then # gitlab
+    REL_TAG=$CI_COMMIT_TAG
+fi
+
+echo "GIT_SHA_SHORT: $GIT_SHA_SHORT"
+echo "FULL_IMAGE_GIT_SHA_SHORT: $FULL_IMAGE:$GIT_SHA_SHORT"
+[[ "$REL_TAG" ]] && echo "FULL_IMAGE_REL_TAG: $FULL_IMAGE:$REL_TAG"
+echo "FULL_IMAGE_LATEST: $FULL_IMAGE:latest"
+
+TAG_LINE="--tag $FULL_IMAGE:latest --tag $FULL_IMAGE:$GIT_SHA_SHORT"
+REL_TAG_LINE="$TAG_LINE --tag $FULL_IMAGE:$REL_TAG"
+
+DOCKER_COMMAND="build --network host"
+
+if [ "$BUILDX" = true ]; then
+    docker buildx ls | grep -q worker_bee && docker buildx stop worker_bee && docker buildx rm worker_bee
+    docker buildx create --use --name worker_bee --buildkitd-flags '--allow-insecure-entitlement network.host'
+    BUILDX_COMMAND=$(cat <<EOL
+        buildx build \
+            --allow network.host \
+            --load \
+            --cache-from type=local,src=/tmp/.buildx-cache \
+            --cache-to type=local,dest=/tmp/.buildx-cache,mode=max
+EOL
+)
+DOCKER_COMMAND=$BUILDX_COMMAND
+fi
+
+DOCKER="docker $DOCKER_COMMAND -f scripts/docker/Dockerfile --build-arg APPLICATION=$APPLICATION"
+
+[[ "$REL_TAG" ]] && eval "$DOCKER $REL_TAG_LINE ." || eval "$DOCKER $TAG_LINE ."
+
+[[ "$BUILDX" = true ]] && docker buildx stop worker_bee && docker buildx rm worker_bee || exit 0

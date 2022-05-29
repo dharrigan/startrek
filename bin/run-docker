@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+if [ ! -f "$PWD/resources/config/config-local.edn" ]; then
+    echo "Missing 'resources/config/config-local.edn'."
+    read -p "Would you like to copy 'config-example.edn' to 'config-local.edn' [Yy]? " -n1 -r
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo
+        echo "Okay, aborting run."
+        exit 1
+    else
+        echo
+        echo "Okay, copying file..."
+        cp "$PWD/resources/config/config-example.edn" "$PWD/resources/config/config-local.edn"
+    fi
+fi
+
+bin/build
+bin/imagify
+
+#
+# See the `docker-compose-X.yml` file to define which config file to use.
+#
+docker-compose -f scripts/docker/docker-compose-${1:-local}.yml up --remove-orphans
