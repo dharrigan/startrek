@@ -26,10 +26,10 @@
 
 (set! *warn-on-reflection* true)
 
-(def public-routes
+(def ^:private public-routes
   [starship-api/routes])
 
-(def routes
+(def ^:private routes
   [["/api" {:middleware [[metrics/prometheus-middleware]]} public-routes]
    ;;
    ;; put other routes below that are *not* to live under the `/api` endpoint

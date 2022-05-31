@@ -58,15 +58,20 @@
   ["/starships"
    ["" {:get {:handler search
               :parameters {:query specs/search}
-              :swagger {:produces [starships-search-api-version]}}
+              :swagger {:consumes http-util/application-json
+                        :produces [starships-search-api-version]}}
         :post {:handler create
                :parameters {:body specs/create}
-               :swagger {:produces [starships-create-api-version]}}}]
+               :swagger {:consumes http-util/application-json
+                         :produces [starships-create-api-version]}}}]
    ["/:id" {:parameters {:path specs/starship-id}}
     ["" {:get {:handler find-by-id
-               :swagger {:produces [starships-find-by-id-api-version]}}
+               :swagger {:consumes http-util/application-json
+                         :produces [starships-find-by-id-api-version]}}
          :delete {:handler delete
-                  :swagger {:produces [starships-delete-api-version]}}
+                  :swagger {:consumes http-util/application-json
+                            :produces [starships-delete-api-version]}}
          :patch {:handler modify
                  :parameters {:body specs/modify}
-                 :swagger {:produces [starships-modify-api-version]}}}]]])
+                 :swagger {:consumes http-util/application-json
+                           :produces [starships-modify-api-version]}}}]]])
