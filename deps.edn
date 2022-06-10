@@ -23,7 +23,7 @@
         org.clojure/tools.logging {:mvn/version "1.2.4"}
         org.flywaydb/flyway-core {:mvn/version "8.5.12"}
         org.glassfish.external/opendmk_jmxremote_optional_jar {:mvn/version "1.0-b01-ea"}
-        org.postgresql/postgresql {:mvn/version "42.3.6"}
+        org.postgresql/postgresql {:mvn/version "42.4.0"}
         org.slf4j/jcl-over-slf4j {:mvn/version "1.7.36"}
         org.slf4j/jul-to-slf4j {:mvn/version "1.7.36"}
         org.slf4j/log4j-over-slf4j {:mvn/version "1.7.36"}
@@ -31,8 +31,8 @@
         ring-cors/ring-cors {:mvn/version "0.1.13"}
         ring/ring-jetty-adapter {:mvn/version "1.9.5"}}
 
- :aliases {:build {:deps {io.github.seancorfield/build-clj {:git/tag "v0.8.0"
-                                                            :git/sha "9bd8b8a"}}
+ :aliases {:build {:deps {io.github.seancorfield/build-clj {:git/tag "v0.8.2"
+                                                            :git/sha "0ffdb4c"}}
                    :ns-default scripts.build}
 
            :dev {:extra-paths ["dev/src"]}
