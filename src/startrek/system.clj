@@ -19,7 +19,7 @@
   {::ds/defs
    {:env {}
     :app {:db #::ds{:start (fn [{:keys [::ds/config]}] (db/start config))
-                    :after-start (fn [{:keys [::ds/instance]}] (db/after-start instance ["db/migration/postgresql"]))
+                    :post-start (fn [{:keys [::ds/instance]}] (db/post-start instance ["db/migration/postgresql"]))
                     :stop (fn [{:keys [::ds/instance]}] (db/stop instance))
                     :config (ds/ref [:env :secrets :db])}
 

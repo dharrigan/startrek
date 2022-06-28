@@ -63,7 +63,7 @@
   ^HikariDataSource [config]
   (connection/->pool HikariDataSource (merge config additional-config)))
 
-(defn after-start
+(defn post-start
   "Migrate the database."
   [^HikariDataSource datasource migration-locations]
   (migration/migrate datasource migration-locations))
