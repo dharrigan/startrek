@@ -3,14 +3,15 @@
 set -eu
 
 #
+# A helpful message for debugging the startup...
+#
+echo "This script is executing in the $ENVIRONMENT environment. The version of this application is $VERSION."
+
+#
 # Use "exec" to run java -jar as PID 1
 #
-# Reduce start up time by pointing to non blocking random number generation
-# JVM options to respect docker cgroup cpu/memory limits
+# also, reduce start up time by pointing to non blocking random number generation
 #
-# The addition of -Djna.library.path is for argon2 to find the native library.
-#
-
 exec java \
     -Dcom.sun.management.jmxremote.local.only=false \
     -Dcom.sun.management.jmxremote.port=$JMX_PORT \

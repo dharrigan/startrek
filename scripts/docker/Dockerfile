@@ -1,7 +1,7 @@
 #
 # Clojure Application Dockerfile
 #
-FROM --platform=linux/amd64 eclipse-temurin:18-jre
+FROM --platform=linux/amd64 eclipse-temurin:19-jre
 
 #
 # Add in curl as it is necessary to perform the healthcheck below
@@ -11,8 +11,6 @@ FROM --platform=linux/amd64 eclipse-temurin:18-jre
 #
 RUN apt-get update \
     && apt-get install -qq -y \
-        argon2 \
-        libargon2-dev \
         curl \
         dnsutils \
         iputils-ping \
@@ -26,14 +24,10 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Add in AWS CLI v2 as useful to have for launch scripts (e.g., copying down configuration files from S3)
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
-    && unzip -qq awscliv2.zip \
-    && ./aws/install \
-    && rm -rf aws awscliv2.zip
-
+#
 # Add in the Prometheus JMX Exporter for remote monitoring/diagnostics
-ARG JMX_EXPORTER_VERSION=0.17.0
+#
+ARG JMX_EXPORTER_VERSION=0.17.2
 #
 RUN wget --quiet https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/$JMX_EXPORTER_VERSION/jmx_prometheus_javaagent-$JMX_EXPORTER_VERSION.jar -O /tmp/jmx_prometheus_javaagent.jar
 
@@ -79,6 +73,12 @@ ARG APPLICATION_JAR="app.jar"
 # Export the name so that the launch script can pick it up
 ENV APPLICATION_JAR $APPLICATION_JAR
 
+# Application Version (usually just `git rev-parse --short=8 HEAD`)
+ARG VERSION
+
+# Export the Version so that the launch script can pick it up
+ENV VERSION $VERSION
+
 # "Contain" the exec of launch.sh to user "clojure" This means that *if* someone
 # was to gain access to the running container, and *if* the user was able to
 # break out of the container, they would escape as the user "clojure" and thus on
@@ -96,7 +96,7 @@ USER clojure
 COPY --chown=clojure:clojure scripts/docker/launch.sh launch.sh
 
 # Copy the Prometheus JMX Exporter config into place
-COPY --chown=clojure:clojure scripts/docker/jmxexporter/config.yml jmx-exporter-config.yml
+COPY --chown=clojure:clojure scripts/docker/jmx-exporter-config.yml jmx-exporter-config.yml
 
 # Copy the jstatd permissions policy into place
 COPY --chown=clojure:clojure scripts/docker/jstatd.policy jstatd.policy
@@ -105,4 +105,4 @@ COPY --chown=clojure:clojure scripts/docker/jstatd.policy jstatd.policy
 COPY --chown=clojure:clojure target/$APPLICATION_JAR $APPLICATION_JAR
 
 # And awaayyy we go!
-CMD ["sh", "./launch.sh"]
+CMD ["./launch.sh"]

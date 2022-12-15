@@ -1,24 +1,46 @@
 (ns dev
   {:author "David Harrigan"}
   (:require
+   [clojure.tools.logging :as log]
    [donut.system :as ds]
    [donut.system.repl :as donut]
-   [startrek.system]))
+   [donut.system.repl.state :as state]
+   [startrek.system]) ;; required in order to load in the defmulti's that define the donut `named-system`'s.
+  (:import
+   [clojure.lang ExceptionInfo]))
 
 (set! *warn-on-reflection* true)
 
+(def ^:private environment (atom nil))
+
 (defmethod ds/named-system ::ds/repl
   [_]
-  (ds/system :local))
+  (ds/system @environment))
 
 (defn go
-  []
-  (donut/start))
+  ([] (go :local))
+  ([env]
+   (reset! environment env)
+   (try
+    (donut/start)
+    :ready-to-rock-and-roll
+    (catch ExceptionInfo e
+      (log/error (ex-data e))
+      :bye-bye))))
 
 (defn stop
   []
-  (donut/stop))
+  (donut/stop)
+  :bye-bye)
 
-(defn restart
+(defn reset
   []
   (donut/restart))
+
+(defn app-config
+  []
+  (:app-config (::ds/instances state/system)))
+
+(defn runtime-config
+  []
+  (:env (::ds/instances state/system)))

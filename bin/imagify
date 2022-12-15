@@ -13,11 +13,11 @@ APPLICATION=${APPLICATION:-$(basename $PWD)}
 FULL_IMAGE=$APPLICATION
 
 if [[ $GITHUB_SHA ]]; then # github
-    GIT_SHA_SHORT=$(git rev-parse --short=7 $GITHUB_SHA)
+    GIT_SHA_SHORT=$(git rev-parse --short=8 $GITHUB_SHA)
 elif [[ $CI_COMMIT_SHA ]]; then # gitlab
-    GIT_SHA_SHORT=$(git rev-parse --short=7 $CI_COMMIT_SHA)
+    GIT_SHA_SHORT=$(git rev-parse --short=8 $CI_COMMIT_SHA)
 else # fallback
-    GIT_SHA_SHORT=$(git rev-parse --short=7 HEAD)
+    GIT_SHA_SHORT=$(git rev-parse --short=8 HEAD)
 fi
 
 if [[ "$GITHUB_REF" =~ ^refs/tags.* ]]; then # github
@@ -29,7 +29,7 @@ fi
 
 echo "GIT_SHA_SHORT: $GIT_SHA_SHORT"
 echo "FULL_IMAGE_GIT_SHA_SHORT: $FULL_IMAGE:$GIT_SHA_SHORT"
-[[ "$REL_TAG" ]] && echo "FULL_IMAGE_REL_TAG: $FULL_IMAGE:$REL_TAG"
+[[ -n "$REL_TAG" ]] && echo "FULL_IMAGE_REL_TAG: $FULL_IMAGE:$REL_TAG"
 echo "FULL_IMAGE_LATEST: $FULL_IMAGE:latest"
 
 TAG_LINE="--tag $FULL_IMAGE:latest --tag $FULL_IMAGE:$GIT_SHA_SHORT"
@@ -51,8 +51,8 @@ EOL
 DOCKER_COMMAND=$BUILDX_COMMAND
 fi
 
-DOCKER="docker $DOCKER_COMMAND -f scripts/docker/Dockerfile --build-arg APPLICATION=$APPLICATION"
+DOCKER="docker $DOCKER_COMMAND -f scripts/docker/Dockerfile --build-arg APPLICATION=$APPLICATION --build-arg VERSION=$GIT_SHA_SHORT"
 
-[[ "$REL_TAG" ]] && eval "$DOCKER $REL_TAG_LINE ." || eval "$DOCKER $TAG_LINE ."
+[[ -n "$REL_TAG" ]] && eval "$DOCKER $REL_TAG_LINE ." || eval "$DOCKER $TAG_LINE ."
 
 [[ "$BUILDX" = true ]] && docker buildx stop worker_bee && docker buildx rm worker_bee || exit 0

@@ -5,7 +5,6 @@
    [clojure.tools.logging :as log]
    [reitit.ring.middleware.exception :as exception]
    [startrek.api.middleware.i18n :as i18n]
-   [startrek.api.util.http :as http-util]
    [taoensso.tempura :as tempura]))
 
 (set! *warn-on-reflection* true)
@@ -68,7 +67,7 @@
   (let [{:keys [code message]} (split-error-message (i18n [error]))
         reference (str (random-uuid))
         body {:code code :error message :reference reference :uri (:uri request)}]
-    {:status http-util/internal-server-error :body body}))
+    {:status 500 :body body}))
 
 (def exceptions-middleware
   (exception/create-exception-middleware

@@ -1,11 +1,28 @@
 (ns startrek.api.middleware.cors
   {:author "David Harrigan"}
   (:require
-   [ring.middleware.cors :refer [wrap-cors]]))
+   [ring.util.response :as response]
+   [startrek.core.config.interface :as config]))
 
 (set! *warn-on-reflection* true)
 
+(defn ^:private add-cors-headers
+  [response {:keys [allow-origin allow-headers allow-credentials? allow-methods] :as cors}]
+  (-> response
+      (assoc-in [:headers "Access-Control-Allow-Origin"] allow-origin)
+      (assoc-in [:headers "Access-Control-Allow-Headers"] allow-headers)
+      (assoc-in [:headers "Access-Control-Allow-Credentials"] (str allow-credentials?))
+      (assoc-in [:headers "Access-Control-Allow-Methods"] allow-methods)))
+
+(defn ^:private with-cors
+  [handler]
+  (fn [{:keys [request-method app-config] :as request}]
+    (if (= :options request-method)
+      (let [cors (config/cors app-config)]
+        (add-cors-headers (response/response nil) cors))
+      (handler request))))
+
 (def cors-middleware
-  [wrap-cors
-   :access-control-allow-origin [#".*"]
-   :access-control-allow-methods [:delete :get :patch :post :put]])
+  {:name ::cors
+   :description "Adds CORS headers to each request/response."
+   :wrap with-cors})

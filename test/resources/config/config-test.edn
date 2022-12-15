@@ -1,9 +1,9 @@
 ;;
-;; Example Configuration
+;; Test Configuration
 ;;
 {:secrets {:db {:dbtype "postgresql"
-                :dbname "startrek"
-                :host "postgres"
+                :dbname "startrek_test"
+                :host #or [#env PLATFORM_DB_HOST "localhost"]
                 :port 5432
                 :username "theborg"
                 :password "resistanceisfutile"}}

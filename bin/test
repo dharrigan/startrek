@@ -2,4 +2,19 @@
 
 set -eo pipefail
 
-clojure -M:test -m kaocha.runner "$@"
+echo ""
+echo "Dropping and recreating the test database."
+echo ""
+docker compose -f scripts/docker/docker-compose-services.yml exec -T -e POSTGRES_PASSWORD=password -- postgres psql -U postgres < scripts/sql/300-drop-create-startrek-test-db.sql
+echo ""
+echo "Done"
+
+if [[ $? -eq 0 ]]; then
+    echo ""
+    echo "Running tests..."
+    echo ""
+    clojure -M:test -m kaocha.runner "$@"
+    echo ""
+    echo "Finished running tests..."
+    echo ""
+fi

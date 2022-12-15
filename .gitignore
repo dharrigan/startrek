@@ -22,3 +22,4 @@ tags.temp
 .clj-kondo/cache
 resources/config/config-local.edn
 .calva
+version.txt

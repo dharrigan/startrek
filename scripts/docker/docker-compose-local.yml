@@ -1,6 +1,5 @@
 ---
 
-version: "3.8"
 services:
 
   startrek:
@@ -10,15 +9,5 @@ services:
       - "9080:9080"   # Prometheus JMX Exporter
       - "5555:5555"   # JMXMP
     environment:
-      RUN_OPTS: "--environment local"  # use the example configuration, as it's configured to assume defaults
-    depends_on:
-      - postgres
-
-  postgres:
-    image: postgres:latest
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_DB: startrek
-      POSTGRES_USER: theborg
-      POSTGRES_PASSWORD: resistanceisfutile
+      # change the environment to suit your needs
+      RUN_OPTS: "--environment example"  # use the example configuration, as it's configured to assume defaults
