@@ -1,38 +1,34 @@
 (ns startrek.api.starship.transformations
   {:author "David Harrigan"}
   (:require
-   [clojure.set :as s]))
+   [ring.util.response :refer [not-found response status]]
+   [startrek.api.utils.constants :refer [created]]))
 
 (set! *warn-on-reflection* true)
 
-(def transform-starships
-  (comp
-   (map #(s/rename-keys % {:starship/affiliation :affiliation
-                           :starship/captain :captain
-                           :starship/class :class
-                           :starship/created :created
-                           :starship/image :image
-                           :starship/launched :launched
-                           :starship/registry :registry
-                           :starship/uuid :id}))
-   (map #(dissoc % :starship/starship_id))))
-
 (defn create
   [uuid]
-  {:id uuid})
+  (-> (response #:starship{:uuid uuid})
+      (status created)))
 
 (defn delete
-  [uuid]
-  (create uuid))
+  [{:starship/keys [uuid] :as starship}]
+  (response #:starship{:uuid uuid}))
 
 (defn search
   [starships]
-  (into [] transform-starships starships))
+  (if (seq starships)
+    (response {:starships starships})
+    (not-found nil)))
 
 (defn find-by-id
   [starship]
-  (search [starship]))
+  (if starship
+    (response starship)
+    (not-found nil)))
 
 (defn modify
   [starship]
-  (search [starship]))
+  (if starship
+    (response starship)
+    (not-found nil)))

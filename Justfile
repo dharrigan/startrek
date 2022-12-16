@@ -3,6 +3,7 @@
 #
 
 set dotenv-load := true
+set positional-arguments := true
 
 # List all recipes (_ == hidden recipe)
 _default:
@@ -11,6 +12,10 @@ _default:
 # Upgrade dependencies
 @deps:
     clj -X:antq
+
+# Checks (or formats) the source code
+@format action="check" files="":
+    clj -M:{{action}} {{files}}
 
 # Test the application
 @test:
@@ -28,11 +33,11 @@ _default:
 @publish: build imagify
     bin/publish
 
-# Run Docker service, e.g., PostgreSQL...
+# Run Docker services, e.g., PostgreSQL...
 @up:
     docker compose -f scripts/docker/docker-compose-services.yml up
 
-# Stop running Docker service
+# Stop running Docker services
 @down:
     docker compose -f scripts/docker/docker-compose-services.yml down
 

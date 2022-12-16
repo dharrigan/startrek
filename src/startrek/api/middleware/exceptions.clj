@@ -35,17 +35,18 @@
     {:code code :reference reference :error (format message body)}))
 
 (defn ^:private format-application-error
-  [error message _]
+  [error message cause]
   (case error
     :database.unavailable message
     :general.exception message
     :not.enabled message
+    :resource.starship.exists (format message (:id cause))
     :service.unavailable message))
 
 (defn ^:private handle-application-error
-  [reference {:keys [reason error] :or {error :service.unavailable} :as exception-data}]
+  [reference {:keys [cause error] :or {error :service.unavailable} :as exception-data}]
   (let [{:keys [code message]} (split-error-message (i18n [error]))]
-    {:code code :reference reference :error (format-application-error error message reason)}))
+    {:code code :reference reference :error (format-application-error error message cause)}))
 
 (defn ^:private exception-info-handler
   [exception-info request] ; exception-info and request (which is not-used) both come from reitit.

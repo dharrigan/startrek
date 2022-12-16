@@ -45,6 +45,6 @@
 
 (defn json-request
   [body method url]
-  (let [json-body (json/generate-string body)]
+  (let [json-body (json/generate-string body {:key-fn name})]
     (-> (mock/request method url json-body)
         (mock/content-type constants/application-json))))

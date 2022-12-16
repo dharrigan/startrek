@@ -5,13 +5,8 @@
 
 (defn request->create
   [request]
-  (let [{{{:keys [captain affiliation launched class registry image]} :body} :parameters} request]
-    {:captain captain
-     :affiliation affiliation
-     :launched launched
-     :class class
-     :registry registry
-     :image image}))
+  (let [{{:keys [body]} :parameters} request]
+    body))
 
 (defn request->delete
   [request]
@@ -26,24 +21,10 @@
 (defn request->modify
   [request]
   (let [{{{:keys [id]} :path} :parameters} request
-        {{{:keys [captain affiliation launched class registry image]} :body} :parameters} request
-        starship {:id id
-                  :captain captain
-                  :affiliation affiliation
-                  :launched launched
-                  :class class
-                  :registry registry
-                  :image image}]
-    starship))
+        {{:keys [body]} :parameters} request]
+    (assoc body :id id)))
 
 (defn request->search
   [request]
-  (let [{{{:keys [id captain affiliation launched class registry image]} :query} :parameters} request
-        starship {:id id
-                  :captain captain
-                  :affiliation affiliation
-                  :launched launched
-                  :class class
-                  :registry registry
-                  :image image}]
-    starship))
+  (let [{{:keys [query]} :parameters} request]
+    query))

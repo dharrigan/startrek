@@ -5,33 +5,29 @@
 
 (set! *warn-on-reflection* true)
 
-;;
-;; Alphabetical order please!
-;;
-
 (defn execute
   "Execute (and return a single result from) a `sql` side-effecting action on the `datasource`."
-  ([sql datasource]
-   (execute sql datasource {}))
-  ([sql datasource opts]
-   (db/execute sql datasource opts)))
+  ([datasource sql]
+   (execute datasource sql {}))
+  ([datasource sql opts]
+   (db/execute datasource sql opts)))
 
-(defn health-check
-  "Perform a health check on the database, basically a `SELECT 1`.
-   This is used for doing Prometheus/Grafana/Alert Manager type of monitoring."
-  [app-config]
-  (db/health-check app-config))
+(defn insert
+  ([datasource table data]
+   (insert datasource table data {}))
+  ([datasource table data opts]
+   (db/insert datasource table data opts)))
 
 (defn select
   "`sql` select many rows from the `datasource`."
-  ([sql datasource]
-   (select sql datasource {}))
-  ([sql datasource opts]
-   (db/select sql datasource opts)))
+  ([datasource sql]
+   (select datasource sql {}))
+  ([datasource sql opts]
+   (db/select datasource sql opts)))
 
 (defn select-many
   "`sql` select many rows from the `datasource`."
-  ([sql datasource]
-   (select-many sql datasource {}))
-  ([sql datasource opts]
-   (db/select-many sql datasource opts)))
+  ([datasource sql]
+   (select-many datasource sql {}))
+  ([datasource sql opts]
+   (db/select-many datasource sql opts)))

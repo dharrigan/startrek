@@ -15,10 +15,10 @@
   (fn [f]
     (let [system (test-system/start)]
       (try
-       (binding [*test-system* system]
-         (f))
-       (finally
-        (test-system/stop system))))))
+        (binding [*test-system* system]
+          (f))
+        (finally
+          (test-system/stop system))))))
 
 ;; https://github.com/seancorfield/next-jdbc/blob/develop/doc/migration-from-clojure-java-jdbc.md#transactions
 (def with-rollback

@@ -1,13 +1,9 @@
-(ns startrek.core.starship.interface
+(ns startrek.core.domain.starship.interface
   {:author "David Harrigan"}
   (:require
-   [startrek.core.starship.impl :as starship]))
+   [startrek.core.domain.starship.impl :as starship]))
 
 (set! *warn-on-reflection* true)
-
-;;
-;; Alphabetical order please!
-;;
 
 (defn create
   [starship app-config]

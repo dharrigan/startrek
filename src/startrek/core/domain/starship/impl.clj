@@ -1,9 +1,9 @@
-(ns startrek.core.starship.impl
+(ns startrek.core.domain.starship.impl
   {:author "David Harrigan"}
   (:require
    [clojure.tools.logging :as log]
    [honey.sql :as sql]
-   [honey.sql.helpers :as helpers :refer [from select where insert-into values on-conflict do-nothing delete-from]]
+   [honey.sql.helpers :as helpers :refer [from select where insert-into values on-conflict do-nothing delete-from returning]]
    [next.jdbc.result-set :as rs]
    [startrek.core.database.interface :as db]))
 
@@ -11,16 +11,17 @@
 
 (defn ^:private find-by-id-sql
   [id]
-  (sql/format {:select [:uuid :created :captain :affiliation :launched :class :registry :image]
-               :from [:starship]
-               :where [:= :uuid id]}))
+  (-> {:select [:uuid :created :captain :affiliation :launched :class :registry :image]
+       :from [:starship]
+       :where [:= :uuid id]}
+      sql/format))
 
 (defn find-by-id
   [query {:keys [db] :as app-config}]
   (let [{:keys [id]} query]
     (log/infof "Finding Starship using query '%s'." query)
-    (when-let [result (-> (find-by-id-sql id)
-                          (db/select db))]
+    (when-let [result (->> (find-by-id-sql id)
+                           (db/select db))]
       (log/infof "Found Starship '%s' using query '%s'." (:starship/uuid result) query)
       result)))
 
@@ -42,8 +43,8 @@
 (defn search
   [query {:keys [db] :as app-config}]
   (log/infof "Finding starships using query '%s'." query)
-  (when-let [results (seq (-> (search-sql query)
-                              (db/select-many db)))]
+  (when-let [results (seq (->> (search-sql query)
+                               (db/select-many db)))]
     (log/infof "Found '%d' starships(s) using query '%s'." (count results) query)
     results))
 
@@ -52,6 +53,7 @@
   (-> (insert-into :starship)
       (values [starship])
       (on-conflict (do-nothing))
+      (returning :*)
       sql/format))
 
 (defn create
@@ -60,8 +62,8 @@
     (throw (ex-info "Starship already exists!." {:cause {:id uuid} :status :409 :error :resource.starship.exists}))
     (do
       (log/infof "Saving Starship '%s'." starship)
-      (let [{:starship/keys [uuid]} (-> (create-sql starship)
-                                        (db/execute db {:return-keys true}))]
+      (let [{:starship/keys [uuid]} (->> (create-sql starship)
+                                         (db/execute db))]
         (when uuid
           (log/infof "Starship '%s' saved to PostgreSQL. FTW!" starship)
           uuid)))))
@@ -70,17 +72,18 @@
   [id]
   (-> (delete-from :starship)
       (where [:= :uuid id])
+      (returning :*)
       sql/format))
 
 (defn delete
   [query {:keys [db] :as app-config}]
   (log/infof "Deleting Starship '%s'." query)
   (let [{:keys [id]} query
-        {:next.jdbc/keys [update-count]} (-> (delete-sql id)
-                                             (db/execute db))]
-    (when (and update-count (pos? update-count))
+        result (->> (delete-sql id)
+                    (db/execute db))]
+    (when result
       (log/infof "Deleted Starship '%s'." query)
-      id)))
+      result)))
 
 (defn ^:private modify-sql
   [modified-starship]
@@ -93,15 +96,15 @@
                       :registry registry
                       :image image})
         (where [:= :uuid uuid])
+        (returning :*)
         sql/format)))
 
 (defn modify
   [query {:keys [db] :as app-config}]
   (let [{:keys [id]} query]
-    (when-let [modified-starship (some-> (find-by-id-sql id)
-                                         (db/select db {:builder-fn rs/as-unqualified-lower-maps}) ;; makes it easier to merge if namespaces are removed
-                                         (merge query)
-                                         (modify-sql)
-                                         (db/execute db {:return-keys true}))]
-      (log/infof "Modified Starship '%s' to '%s'." id modified-starship)
-      modified-starship)))
+    (when-let [saved-starship (-> (db/select db (find-by-id-sql id) {:builder-fn rs/as-unqualified-lower-maps}))]
+      (let [updated-starship (merge saved-starship query)
+            updated-starship-sql (modify-sql updated-starship)
+            modified-starship' (db/execute db updated-starship-sql)]
+        (log/infof "Modified Starship '%s' to '%s'." id modified-starship')
+        modified-starship'))))
