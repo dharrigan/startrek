@@ -22,7 +22,7 @@
         metosin/reitit {:mvn/version "0.5.18" :exclusions [metosin/reitit-sieppari metosin/reitit-dev]}
         org.clojure/tools.cli {:mvn/version "1.0.214"}
         org.clojure/tools.logging {:mvn/version "1.2.4"}
-        org.flywaydb/flyway-core {:mvn/version "9.10.0"}
+        org.flywaydb/flyway-core {:mvn/version "9.10.1"}
         org.glassfish.external/opendmk_jmxremote_optional_jar {:mvn/version "1.0-b01-ea"}
         org.postgresql/postgresql {:mvn/version "42.5.1"}
         org.slf4j/jcl-over-slf4j {:mvn/version "2.0.6"}

@@ -1,4 +1,4 @@
-= Star Trek Clojure/script Project
+= Star Trek Clojure Project
 :author: David Harrigan
 :email: dharrigan@gmail.com
 :docinfo: true
@@ -47,6 +47,7 @@ store a list of starships. The technologies in play include:
 * https://github.com/donut-power/system[donut.system]
 * https://github.com/juxt/aero[juxt aero]
 * https://github.com/flyway/flyway[flyway database migration]
+* https://babashka.org/[babashka (for some gentle scripting)]
 
 A full list of the technologies that are used can be found in the
 `deps.edn` file.
@@ -54,14 +55,6 @@ A full list of the technologies that are used can be found in the
 This service also exposes
 https://prometheus.io/docs/introduction/overview/[Prometheus] metrics
 *AND* a JMX endpoint for your enjoyment!
-
-=== Star Trek UI
-
-A companion project is available on
-https://github.com/dharrigan/startrek-ui[github] that exposes a UI
-written in https://clojurescript.org/[ClojureScript]. It's highly
-recommended that you look at that project too and see if you can get
-them both working together! 😀
 
 === Engage!
 
@@ -116,6 +109,22 @@ or
 
 * `bin/build`
 * `bin/run-docker`
+
+== Interrogating the API
+
+Once the service is up and running (and listening by default on port 8080),
+there are a few examples of interrogating the API to pull back some data. The
+scripts can be found in `scripts/bb`.
+
+IMPORTANT: You will need https://babashka.org/[Babashka] installed.
+
+To run a script just execute them on the command line, i.e.,
+`./find-all-starships.clj`
+
+If you have https://github.com/borkdude/jet[jet] installed, you can convert
+the EDN response to JSON like so:
+
+`./find-all-starships.clj | jet -o json`
 
 == License
 
