@@ -35,18 +35,21 @@
     {:code code :reference reference :error (format message body)}))
 
 (defn ^:private format-application-error
-  [error message cause]
+  [message error {:keys [id resource] :as opts}]
   (case error
     :database.unavailable message
     :general.exception message
+    :missing.or.invalid.basic.credentials message
+    :missing.or.invalid.token.credentials message
     :not.enabled message
-    :resource.starship.exists (format message (:id cause))
+    :resource.exists (format message resource id)
+    :resource.does.not.exist (format message resource id)
     :service.unavailable message))
 
 (defn ^:private handle-application-error
-  [reference {:keys [cause error] :or {error :service.unavailable} :as exception-data}]
+  [reference {:keys [error opts] :or {error :service.unavailable} :as exception-data}]
   (let [{:keys [code message]} (split-error-message (i18n [error]))]
-    {:code code :reference reference :error (format-application-error error message cause)}))
+    {:code code :reference reference :error (format-application-error message error opts)}))
 
 (defn ^:private exception-info-handler
   [exception-info request] ; exception-info and request (which is not-used) both come from reitit.
@@ -61,7 +64,10 @@
                    ;;
                    (handle-application-error reference exception-data))
                  (assoc :uri (:uri request)))]
-    {:status http-status :body body}))
+    (case error
+      :missing.or.invalid.basic.credentials {:status http-status :headers {"WWW-Authenticate" "Basic realm=\"startrek\""} :body body}
+      :missing.or.invalid.token.credentials {:status http-status :headers {"WWW-Authenticate" "Token realm=\"startrek\""} :body body}
+      {:status http-status :body body})))
 
 (defn ^:private exception-handler
   [error _exception request] ; exception and request come from reitit.

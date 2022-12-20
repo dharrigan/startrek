@@ -8,17 +8,10 @@
 
 (defn routes
   []
-  [["/favicon.ico" {:get {:no-doc true
-                          :handler handler/favicon}}]
-   ["/version" {:get {:no-doc true
-                      :handler handler/version}}]
-   ["/ping" {:get {:no-doc true
-                   :handler handler/ping}}]
-   ["/prometheus" {:get {:no-doc true
-                         :handler handler/metrics}}]
-   ["/docs/*" {:get {:no-doc true
-                     :handler handler/swagger-ui}}]
-   ["/swagger.json" {:get {:no-doc true
-                           :swagger {:info {:title "API Documentation"}
-                                     :basePath "/"}
+  [["/favicon.ico" {:get {:handler handler/favicon}}]
+   ["/version" {:get {:handler handler/version}}]
+   ["/ping" {:get {:handler handler/ping}}]
+   ["/prometheus" {:get {:handler handler/metrics}}]
+   ["/docs/*" {:get {:handler handler/swagger-ui}}]
+   ["/swagger.json" {:get {:swagger {:info {:title "API Documentation"} :basePath "/"}
                            :handler (swagger/create-swagger-handler)}}]])

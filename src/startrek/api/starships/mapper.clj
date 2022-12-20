@@ -1,4 +1,4 @@
-(ns startrek.api.starship.mapper
+(ns startrek.api.starships.mapper
   {:author "David Harrigan"})
 
 (set! *warn-on-reflection* true)

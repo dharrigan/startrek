@@ -1,8 +1,11 @@
-(ns startrek.api.starship.handler
+(ns startrek.api.starships.handler
+  {:author "David Harrigan"}
   (:require
-   [startrek.api.starship.mapper :as mapper]
-   [startrek.api.starship.transformations :as transformations]
+   [startrek.api.starships.mapper :as mapper]
+   [startrek.api.starships.transformations :as transformations]
    [startrek.core.domain.starship.interface :as starship]))
+
+(set! *warn-on-reflection* true)
 
 (defn create
   [{:keys [app-config] :as request}]
@@ -12,14 +15,14 @@
 
 (defn delete
   [{:keys [app-config] :as request}]
-  (let [uuid (mapper/request->delete request)]
-    (-> (starship/delete uuid app-config)
-        (transformations/delete))))
+  (let [query (mapper/request->delete request)]
+    (->> (starship/delete query app-config)
+         (transformations/delete query))))
 
 (defn find-by-id
   [{:keys [app-config] :as request}]
-  (let [starship (mapper/request->find-by-id request)]
-    (-> (starship/find-by-id starship app-config)
+  (let [query (mapper/request->find-by-id request)]
+    (-> (starship/find-by-id query app-config)
         (transformations/find-by-id))))
 
 (defn modify

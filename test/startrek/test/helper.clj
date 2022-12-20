@@ -7,6 +7,7 @@
    [donut.system :as ds]
    [ring.mock.request :as mock]
    [startrek.api.utils.constants :as constants]
+   [startrek.core.security.interface :as security]
    [startrek.router :as router]
    [startrek.test.fixtures :as fixtures]))
 
@@ -47,4 +48,11 @@
   [body method url]
   (let [json-body (json/generate-string body {:key-fn name})]
     (-> (mock/request method url json-body)
+        (assoc :app-config (app-config))
         (mock/content-type constants/application-json))))
+
+(defn authenticate-as
+  [{:keys [app-config] :as request} email-address password]
+  (let [credentials {:username email-address :password password}
+        {:keys [session-id] :as session} (security/basic-authentication credentials app-config)]
+    (assoc-in request [:headers "Authorization"] (str "Token " session-id))))

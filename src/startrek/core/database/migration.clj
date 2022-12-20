@@ -17,8 +17,8 @@
   [datasource migration-locations]
   (Flyway. (doto ^FluentConfiguration
             (FluentConfiguration.)
-             (.dataSource datasource)
-             (.locations ^"[Ljava.lang.String;" (into-array String migration-locations)))))
+            (.dataSource datasource)
+            (.locations ^"[Ljava.lang.String;" (into-array String migration-locations)))))
 
 (defn migrate
   "Migrate a database from one version to the next version using flyway.

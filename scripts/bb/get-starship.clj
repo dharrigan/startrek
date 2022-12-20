@@ -13,7 +13,7 @@
 
 (defn get-starship
   [uuid]
-  (get-request (str "/api/starships/" uuid)))
+  (get-request (str "/api/public/starships/" uuid)))
 
 (def cli-options
   [["-u" "--uuid UUID" "Starship UUID"]])

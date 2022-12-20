@@ -11,13 +11,15 @@
    [reitit.ring.middleware.parameters :as parameters]
    [reitit.spec :as rs]
    [reitit.swagger :as swagger]
-   [ring.adapter.jetty :as jetty]
+   [ring.adapter.jetty9 :as jetty]
+   [ring.middleware.cookies :as cookies]
    [startrek.api.general.handler :as general-handler]
    [startrek.api.general.routes :as general]
    [startrek.api.middleware.app-config :as app-config]
    [startrek.api.middleware.cors :as cors]
    [startrek.api.middleware.exceptions :as exceptions]
    [startrek.api.middleware.metrics :as metrics]
+   [startrek.api.middleware.sessions :as sessions]
    [startrek.api.middleware.transactions :as transactions]
    [startrek.api.routes :as api]
    [startrek.api.utils.constants :refer [application-json]])
@@ -28,16 +30,16 @@
 
 (defn ^:private routes
   []
-  [["" (api/routes)]
+  [["" {:swagger {:tags ["Startrek API"]}} (api/routes)]
    ;;
    ;; put other routes below that are *not* to live under the `/api` endpoint
    ;;
-   (general/routes)])
+   ["" {:no-doc true} (general/routes)]])
 
 (def ^:private custom-serialization
   (m/create
    (-> m/default-options
-       (assoc-in [:formats application-json :encoder-opts] {:encode-key-fn (comp csk/->kebab-case name) :strip-nils true}) ;; clojure -> json
+       (assoc-in [:formats application-json :encoder-opts] {:encode-key-fn (comp csk/->camelCase name) :strip-nils true}) ;; clojure -> json
        (assoc-in [:formats application-json :decoder-opts] {:decode-key-fn (comp keyword csk/->kebab-case)})))) ;; json -> clojure
 
 (defn ^:private router
@@ -56,6 +58,7 @@
                         coercion/coerce-exceptions-middleware
                         coercion/coerce-request-middleware
                         coercion/coerce-response-middleware
+                        cookies/wrap-cookies
                         transactions/transactions-middleware]}}))
 
 (defn ^:private static-ring-handler
@@ -64,7 +67,8 @@
                      (ring/routes
                       (ring/create-resource-handler {:path "/" :not-found-handler general-handler/not-found})
                       (ring/create-default-handler))
-                     {:middleware [[app-config/app-config-middleware app-config]]}))
+                     {:middleware [[app-config/app-config-middleware app-config] ;; theses middlewares are applied before any other middleware. They are "global" so to speak...
+                                   [sessions/sessions-middleware]]}))
 
 (defn ^:private repl-friendly-ring-handler
   [app-config]
