@@ -27,12 +27,12 @@
   (fn [{:keys [identity] :as request}]
     (if-let [{{:officer/keys [email-address]} :officer} identity]
       (do
-       (log/debugf "Performing POST BASIC authentication for officer '%s'." email-address)
-       (if (authenticated? request)
-         (do
-          (log/debugf "POST BASIC authentication completed for officer '%s'." email-address)
-          (handler request))
-         (throw-unauthorized-exception authentication-errors/missing-or-invalid-basic-credentials)))
+        (log/debugf "Performing POST BASIC authentication for officer '%s'." email-address)
+        (if (authenticated? request)
+          (do
+            (log/debugf "POST BASIC authentication completed for officer '%s'." email-address)
+            (handler request))
+          (throw-unauthorized-exception authentication-errors/missing-or-invalid-basic-credentials)))
       (throw-unauthorized-exception authentication-errors/missing-or-invalid-basic-credentials))))
 
 (defn ^:private token-authentication
@@ -50,13 +50,13 @@
   (fn [{:keys [identity] :as request}]
     (if-let [{{:officer/keys [email-address]} :officer} identity]
       (do
-       (log/debugf "Performing POST TOKEN authentication for officer '%s'." email-address)
-       (if (authenticated? request)
-         (do
-          (log/debugf "POST TOKEN authentication completed for officer '%s'." email-address)
-          (-> (handler request)
-              (assoc :identity identity))) ;; associate the identity to the response so we can use it on the way out...
-         (throw-unauthorized-exception authentication-errors/missing-or-invalid-token-credentials)))
+        (log/debugf "Performing POST TOKEN authentication for officer '%s'." email-address)
+        (if (authenticated? request)
+          (do
+            (log/debugf "POST TOKEN authentication completed for officer '%s'." email-address)
+            (-> (handler request)
+                (assoc :identity identity))) ;; associate the identity to the response so we can use it on the way out...
+          (throw-unauthorized-exception authentication-errors/missing-or-invalid-token-credentials)))
       (throw-unauthorized-exception authentication-errors/missing-or-invalid-token-credentials))))
 
 (def ^:private basic-authentication-middleware

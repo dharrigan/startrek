@@ -9,6 +9,6 @@
                 :password "resistanceisfutile"}}
 
  :runtime-config {:environment :local
-                  :cors {:allow-origin "localhost"}
+                  :cors {:allow-origin "http://localhost"}
                   :jetty {:port 8080}
                   :jmxmp {:port 5555}}}

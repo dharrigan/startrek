@@ -66,12 +66,12 @@
   (if-let [{:starship/keys [uuid]} (first (search starship app-config))]
     (errors/throw-resource-exists-exception (starship-with-id-exists uuid))
     (do
-     (log/infof "Saving starship '%s'." starship)
-     (let [{:starship/keys [uuid]} (->> (create-sql starship)
-                                        (db/execute db))]
-       (when uuid
-         (log/infof "Starship '%s' saved to PostgreSQL. FTW!" starship)
-         uuid)))))
+      (log/infof "Saving starship '%s'." starship)
+      (let [{:starship/keys [uuid]} (->> (create-sql starship)
+                                         (db/execute db))]
+        (when uuid
+          (log/infof "Starship '%s' saved to PostgreSQL. FTW!" starship)
+          uuid)))))
 
 (defn ^:private delete-sql
   [id]

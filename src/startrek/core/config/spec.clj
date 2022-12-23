@@ -21,7 +21,7 @@
                 [:password :string]]]]]
    [:runtime-config [:map
                      [:cors [:map
-                             [:allow-origin {:default "localhost"} :string]
+                             [:allow-origin {:default "http://localhost"} :string]
                              [:allow-headers {:default "*"} :string]
                              [:allow-credentials? {:default true} :boolean]
                              [:allow-methods {:default "CONNECT, DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT"} :string]]]

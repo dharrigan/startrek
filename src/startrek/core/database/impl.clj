@@ -24,12 +24,12 @@
   ([datasource sql opts]
    (log/tracef "Executing JDBC '%s'." sql)
    (try
-    (when-let [results (jdbc/execute-one! datasource sql (merge {:builder-fn as-kebab-maps} opts))]
-      (log/tracef "JDBC Results '%s'." results)
-      results)
-    (catch Exception exception
-      (log/error exception)
-      (throw-database-exception (generic-database-error exception sql opts))))))
+     (when-let [results (jdbc/execute-one! datasource sql (merge {:builder-fn as-kebab-maps} opts))]
+       (log/tracef "JDBC Results '%s'." results)
+       results)
+     (catch Exception exception
+       (log/error exception)
+       (throw-database-exception (generic-database-error exception sql opts))))))
 
 (defn insert
   [datasource table data opts]
@@ -48,24 +48,24 @@
   ([datasource sql opts]
    (log/tracef "Executing JDBC '%s'." sql)
    (try
-    (when-let [results (jdbc/execute-one! datasource sql (merge {:builder-fn as-kebab-maps} opts))]
-      (log/tracef "JDBC Result '%s'." results)
-      results)
-    (catch Exception exception
-      (log/error exception)
-      (throw-database-exception (generic-database-error exception sql opts))))))
+     (when-let [results (jdbc/execute-one! datasource sql (merge {:builder-fn as-kebab-maps} opts))]
+       (log/tracef "JDBC Result '%s'." results)
+       results)
+     (catch Exception exception
+       (log/error exception)
+       (throw-database-exception (generic-database-error exception sql opts))))))
 
 (defn select-many
   ([datasource sql] (select-many datasource sql {}))
   ([datasource sql opts]
    (log/tracef "Executing JDBC '%s'." sql)
    (try
-    (when-let [results (jdbc/execute! datasource sql (merge {:builder-fn as-kebab-maps} opts))]
-      (log/tracef "JDBC Result '%s'." results)
-      results)
-    (catch Exception exception
-      (log/error exception)
-      (throw-database-exception (generic-database-error exception sql opts))))))
+     (when-let [results (jdbc/execute! datasource sql (merge {:builder-fn as-kebab-maps} opts))]
+       (log/tracef "JDBC Result '%s'." results)
+       results)
+     (catch Exception exception
+       (log/error exception)
+       (throw-database-exception (generic-database-error exception sql opts))))))
 
 ;; Donut Lifecycle Functions
 
