@@ -18,6 +18,7 @@
    [startrek.api.middleware.app-config :as app-config]
    [startrek.api.middleware.cors :as cors]
    [startrek.api.middleware.exceptions :as exceptions]
+   [startrek.api.middleware.locales :as locales]
    [startrek.api.middleware.metrics :as metrics]
    [startrek.api.middleware.sessions :as sessions]
    [startrek.api.middleware.transactions :as transactions]
@@ -68,6 +69,7 @@
                       (ring/create-resource-handler {:path "/" :not-found-handler general-handler/not-found})
                       (ring/create-default-handler))
                      {:middleware [[app-config/app-config-middleware app-config] ;; theses middlewares are applied before any other middleware. They are "global" so to speak...
+                                   [locales/locales-middleware]
                                    [sessions/sessions-middleware]]}))
 
 (defn ^:private repl-friendly-ring-handler

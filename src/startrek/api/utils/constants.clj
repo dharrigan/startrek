@@ -5,4 +5,5 @@
 
 (def application-json "application/json")
 (def created 201)
+(def internal-server-error 500)
 (def ok 200)

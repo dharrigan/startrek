@@ -4,38 +4,20 @@
    [clojure.string :refer [split]]
    [clojure.tools.logging :as log]
    [reitit.ring.middleware.exception :as exception]
-   [startrek.api.middleware.i18n :as i18n]
-   [taoensso.tempura :as tempura]))
+   [startrek.api.utils.constants :refer [internal-server-error]]
+   [startrek.core.utils.i18n :refer [resolve-message]]))
 
 (set! *warn-on-reflection* true)
 
 (def ^:private double-colon (re-pattern "::"))
-(def ^:private i18n (partial tempura/tr {:dict i18n/dictionary} [:en]))
 
 (defn ^:private split-error-message
   [error]
   (let [code-and-error (split error double-colon)]
     {:code (first code-and-error) :message (str (second code-and-error))}))
 
-(defn ^:private rekey-http-client-status
-  [^long status]
-  (case status
-    400 :http.400
-    401 :http.401
-    403 :http.403
-    409 :http.409
-    404 :http.404
-    500 :http.500
-    :service.unavailable))
-
-(defn ^:private handle-http-client-error
-  [reference {:keys [status body] :as exception-data}]
-  (let [error (rekey-http-client-status status)
-        {:keys [code message]} (split-error-message (i18n [error]))]
-    {:code code :reference reference :error (format message body)}))
-
 (defn ^:private format-application-error
-  [message error {:keys [id resource] :as opts}]
+  [error message {:keys [id resource] :as opts}]
   (case error
     :database.unavailable message
     :general.exception message
@@ -46,23 +28,25 @@
     :resource.does.not.exist (format message resource id)
     :service.unavailable message))
 
-(defn ^:private handle-application-error
-  [reference {:keys [error opts] :or {error :service.unavailable} :as exception-data}]
-  (let [{:keys [code message]} (split-error-message (i18n [error]))]
-    {:code code :reference reference :error (format-application-error message error opts)}))
+(defn ^:private handle-api-error
+  [reference locales {:keys [error type reason] :as exception-data}]
+  (let [resource-id (keyword (name type) (name error))
+        resolved-error-message (resolve-message locales resource-id)
+        {:keys [code message]} (split-error-message resolved-error-message)
+        resolved-error (format-application-error error message reason)]
+    {:code code :reference reference :error resolved-error}))
 
 (defn ^:private exception-info-handler
-  [exception-info request] ; exception-info and request (which is not-used) both come from reitit.
+  [exception-info {:keys [locales] :as request}] ; exception-info and request both come from reitit.
   (let [{:keys [http-status error] :or {http-status 500} :as exception-data} (ex-data exception-info)
         reference (str (random-uuid))
         body (-> (case error
-                   :clj-http.client/unexceptional-status (handle-http-client-error reference exception-data)
                    ;;
                    ;; add other exception-info types and handlers here ↑ if appropriate
                    ;;
                    ;; finally, catch all.
                    ;;
-                   (handle-application-error reference exception-data))
+                   (handle-api-error reference locales exception-data))
                  (assoc :uri (:uri request)))]
     (case error
       :missing.or.invalid.basic.credentials {:status http-status :headers {"WWW-Authenticate" "Basic realm=\"startrek\""} :body body}
@@ -70,11 +54,13 @@
       {:status http-status :body body})))
 
 (defn ^:private exception-handler
-  [error _exception request] ; exception and request come from reitit.
-  (let [{:keys [code message]} (split-error-message (i18n [error]))
+  [error _exception {:keys [locales] :as request}] ; exception and request come from reitit.
+  (let [resource-id (keyword "api" (name error))
+        resolved-error-message (resolve-message locales resource-id)
+        {:keys [code message]} (split-error-message resolved-error-message)
         reference (str (random-uuid))
         body {:code code :error message :reference reference :uri (:uri request)}]
-    {:status 500 :body body}))
+    {:status internal-server-error :body body}))
 
 (def exceptions-middleware
   (exception/create-exception-middleware

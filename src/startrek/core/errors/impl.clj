@@ -10,16 +10,16 @@
 
 (defn throw-database-exception
   [{:keys [message data cause] :as error}]
-  (throw (ex-info message (assoc data :http-status internal-server-error) cause)))
+  (throw (ex-info message (assoc data :http-status internal-server-error :type :api) cause)))
 
 (defn throw-resource-does-not-exist-exception
   [{:keys [message data cause] :as error}]
-  (throw (ex-info message (assoc data :http-status not-found) cause)))
+  (throw (ex-info message (assoc data :http-status not-found :type :api) cause)))
 
 (defn throw-resource-exists-exception
   [{:keys [message data cause] :as error}]
-  (throw (ex-info message (assoc data :http-status conflict) cause)))
+  (throw (ex-info message (assoc data :http-status conflict :type :api) cause)))
 
 (defn throw-unauthorized-exception
   [{:keys [message data cause] :as error}]
-  (throw (ex-info message (assoc data :http-status unauthorized) cause)))
+  (throw (ex-info message (assoc data :http-status unauthorized :type :api) cause)))
