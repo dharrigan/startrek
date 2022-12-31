@@ -88,11 +88,11 @@
    (merge
     exception/default-handlers ;; reitit default handlers
     {;;
-     ;; Catch these exceptions and deal using the exception-info-handler (above)
+     ;; Catch these exceptions and deal using the exception-info-handler (below)
      ;;
      clojure.lang.ExceptionInfo exception-info-handler
      ;;
-     ;; Catch these exceptions and deal using the exception handler (above)
+     ;; Catch these exceptions and deal using the exception handler (below)
      ;;
      java.io.IOException (partial exception-handler :service.unavailable)
      java.lang.IllegalArgumentException (partial exception-handler :service.unavailable)
