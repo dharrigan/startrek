@@ -8,7 +8,8 @@
 
 (def ^:private dictionary
   {:en
-   {:api {:__load-resource "i18n/api/en.edn"}}
+   {:api {:__load-resource "i18n/api/en.edn"}
+    :coercion {:__load-resource "i18n/coercion/en.edn"}}
    :pl
    {:api {:__load-resource "i18n/api/pl.edn"}}})
 

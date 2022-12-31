@@ -53,10 +53,9 @@
            :middleware [swagger/swagger-feature
                         cors/cors-middleware
                         muuntaja/format-middleware
-                        metrics/metrics-middleware
                         exceptions/exceptions-middleware
+                        metrics/metrics-middleware
                         parameters/parameters-middleware
-                        coercion/coerce-exceptions-middleware
                         coercion/coerce-request-middleware
                         coercion/coerce-response-middleware
                         cookies/wrap-cookies

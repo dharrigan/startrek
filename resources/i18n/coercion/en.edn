@@ -1,0 +1,5 @@
+;;
+;; i18n en coercion messages
+;;
+{:general.exception "COER10000::'%s' %s. Instead, got '%s'."
+ :uuid "COER10010::The value for '%s' should be a Type 4 UUID. Instead, got '%s'."}
