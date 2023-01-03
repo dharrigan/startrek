@@ -24,7 +24,7 @@
 (defn create-request
   [session-id url-path]
   (let [request {:headers {"Authorization" (str "Token " session-id) "Content-Type" content-type} :body defiant}
-        {:keys [body]} @(http/post (str "http://localhost:18080" url-path) request)]
+        {:keys [body]} @(http/post (str "http://localhost:8080" url-path) request)]
     (json/parse-string body true)))
 
 (defn create-starship
