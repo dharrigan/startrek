@@ -80,6 +80,6 @@
   (migration/migrate datasource migration-locations))
 
 (defn stop
-  "Stop the connection poool for the specified `datasource."
+  "Stop the connection pool for the specified `datasource."
   [^HikariDataSource datasource]
   (.close datasource))
