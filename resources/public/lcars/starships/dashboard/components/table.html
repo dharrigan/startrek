@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{lcarsBase :: layout(~{::section}, 'details')}" xmlns:th="http://www.thymeleaf.org">
+    <section>
+        <div th:fragment="table (starships)">
+            <div id="viewStarship"></div>
+            <div class="table-responsive">
+                <table id="starshipsTable" class="display dataTable w-100">
+                    <thead>
+                        <tr class="align-middle">
+                            <th aria-controls="starshipsTable" rowspan="1" colspan="1"></th>
+                            <th class="sorting" aria-controls="starshipsTable" rowspan="1" colspan="1" th:text="#{ui.lcars.uuid}">UUID</th>
+                            <th class="sorting" aria-controls="starshipsTable" rowspan="1" colspan="1" th:text="#{ui.lcars.created}">Created</th>
+                            <th class="sorting" aria-controls="starshipsTable" rowspan="1" colspan="1" th:text="#{ui.lcars.captain}">Captain</th>
+                            <th class="sorting" aria-controls="starshipsTable" rowspan="1" colspan="1" th:text="#{ui.lcars.affiliation}">Affiliation</th>
+                            <th class="sorting" aria-controls="starshipsTable" rowspan="1" colspan="1" th:text="#{ui.lcars.launched}">Launched</th>
+                            <th class="sorting" aria-controls="starshipsTable" rowspan="1" colspan="1" th:text="#{ui.lcars.class}">Class</th>
+                            <th class="sorting" aria-controls="starshipsTable" rowspan="1" colspan="1" th:text="#{ui.lcars.registry}">Registry</th>
+                        </tr>
+                    </thead>
+                    <tbody th:with="dateFormat=#{ui.lcars.date.format}">
+                        <tr class="align-middle" th:each="starship : ${starships}">
+                            <td class="align-middle text-center">
+                                <button class="btn btn-primary" type="button" th:text="#{ui.lcars.view.button}" th:hx-get="'starships/'+ ${starship.uuid}" hx-target="#viewStarship">View</button>
+                            </td>
+                            <td th:text="${starship.uuid}">UUID</td>
+                            <td th:text="${#dates.format(starship.created, dateFormat)}">Date Created</td>
+                            <td th:text="${starship.captain}">Captain</td>
+                            <td th:text="${starship.affiliation}">Affiliation</td>
+                            <td th:text="${starship.launched}">Launched</td>
+                            <td th:text="${starship.class}">Class</td>
+                            <td th:text="${starship.registry}">Registry</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <script th:inline="javascript">
+                    $(document).ready(() => {
+                        $('#starshipsTable').DataTable({
+                            searching: false,
+                            lengthChange: false,
+                            paging: false,
+                            order: [
+                                [4, 'desc']
+                            ],
+                            columnDefs: [
+                                { orderable: false, targets: 0 }
+                            ],
+                        });
+                    });
+                    $(document).on('htmx:afterSettle', (event) => {
+                        const { target } = event.detail;
+                        if (target?.id === "viewStarship") {
+                            event.stopPropagation();
+                            $('#starshipModal').modal('show');
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </section>
+</html>

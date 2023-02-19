@@ -4,7 +4,7 @@
    [startrek.api.middleware.authentication :refer [public-authentication-middleware]]
    [startrek.api.officers.handler :as handler]
    [startrek.api.officers.spec :as spec]
-   [startrek.api.utils.constants :refer [application-json ok]]))
+   [startrek.shared.constants :refer [application-json ok]]))
 
 (set! *warn-on-reflection* true)
 

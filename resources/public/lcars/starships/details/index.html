@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <section>
+        <div id="starshipModal" class="modal show" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-info">
+                        <h5 class="modal-title fw-bold" th:text="#{ui.lcars.view.starship}">View Starship</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row mb-2">
+                                <div class="col fw-bold">
+                                    <span th:text="#{ui.lcars.uuid}">UUID</span>
+                                </div>
+                                <div class="col-10">
+                                    <span th:text="${uuid}">UUID</span>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col fw-bold">
+                                    <span th:text="#{ui.lcars.created}">Created</span>:
+                                </div>
+                                <div class="col-10" th:with="dateFormat=#{ui.lcars.date.format}">
+                                    <span th:text="${#dates.format(created, dateFormat)}">Date Created</span>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col fw-bold">
+                                    <span th:text="#{ui.lcars.captain}">Captain</span>:
+                                </div>
+                                <div class="col-10">
+                                    <span th:text="${captain}">Captain</span>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col fw-bold">
+                                    <span th:text="#{ui.lcars.affiliation}">Affiliation</span>:
+                                </div>
+                                <div class="col-10">
+                                    <span th:text="${affiliation}">Affiliation</span>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col fw-bold">
+                                    <span th:text="#{ui.lcars.launched}">Launched</span>:
+                                </div>
+                                <div class="col-10">
+                                    <span th:text="${launched}">Launched</span>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col fw-bold">
+                                    <span th:text="#{ui.lcars.class}">Class</span>:
+                                </div>
+                                <div class="col-10">
+                                    <span th:text="${class}">Class</span>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col fw-bold">
+                                    <span th:text="#{ui.lcars.registry}">Registry</span>:
+                                </div>
+                                <div class="col-10">
+                                    <span th:text="${registry}">Registry</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col fw-bold">
+                                    <span th:text="#{ui.lcars.image}">Image</span>:
+                                </div>
+                                <div class="col-10">
+                                    <img th:src="'/assets/images/' + ${image}" alt="${image}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" th:text="#{ui.lcars.close.button}">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</html>

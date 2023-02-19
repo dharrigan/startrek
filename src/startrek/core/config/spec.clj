@@ -18,8 +18,16 @@
                 [:host {:default "localhost"} :string]
                 [:port {:default 5432} pos-int?]
                 [:username :string]
-                [:password :string]]]]]
+                [:password :string]]]
+              [:redis {:default "redis://localhost/0"} [:map [:sessions [:map [:uri :string]]]]]]]
    [:runtime-config [:map
+                     [:db [:map [:migration-locations {:default ["db/platform/migrations"]} [:vector :string]]]]
+                     [:cookies [:map
+                                [:secure? {:default false} :boolean]
+                                [:session-cookie-name {:default "__HOST-lcars-session"} :string]
+                                [:token-cookie-name {:default "__HOST-lcars-token"} :string]]]
+                     [:core-control [:map
+                                     [:keep-previous-session? {:default false} :boolean]]]
                      [:cors [:map
                              [:allow-origin {:default "http://localhost"} :string]
                              [:allow-headers {:default "*"} :string]
@@ -27,7 +35,12 @@
                              [:allow-methods {:default "CONNECT, DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT"} :string]]]
                      [:environment {:default :local} [:enum :local :test :development :staging :production]]
                      [:jetty {:default 8080} [:map [:port pos-int?]]]
-                     [:jmxmp {:default 5555} [:map [:port pos-int?]]]]]])
+                     [:jmxmp {:default 5555} [:map [:port pos-int?]]]
+                     [:thymeleaf [:map
+                                  [:prefix {:default "public/"} :string]
+                                  [:suffix {:default ".html"} :string]
+                                  [:cacheable? {:default false} :boolean]
+                                  [:cache-ttl-ms {:default 0} [:or [:= 0] pos-int?]]]]]]])
 
 (defn apply-defaults
   [config]
@@ -43,6 +56,10 @@
 
   (require '[clojure.java.io :as io]
            '[aero.core :refer [read-config]])
+
+  (->> (io/resource "config/config-local.edn")
+       (read-config)
+       (apply-defaults))
 
   (->> (io/resource "config/config-local.edn")
        (read-config)

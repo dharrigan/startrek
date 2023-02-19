@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <section>
+        <div th:fragment="navbar-container (navBarSelection)" class="w-100 mw-100 mt-3">
+            <nav class="navbar navbar-dark navbar-expand-md sticky-top bg-navbar rounded">
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="material-icons float-start fs-2">person</i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="#" th:text="#{ui.lcars.logout}" hx-post="/lcars/logout">Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </section>
+</html>

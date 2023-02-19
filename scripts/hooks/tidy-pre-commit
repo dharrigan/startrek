@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if ! command -v tidy &> /dev/null
+then
+    echo "tidy (html formatter) could not be found. Please install it."
+    exit 2
+fi
+
+if [[ $(tidy -config scripts/hooks/tidy.config -q -e $@) -eq 2 ]]; then
+    echo
+    echo "Error: new tidy (html) formatting errors found. Please fix them and retry the commit."
+    exit 1
+fi

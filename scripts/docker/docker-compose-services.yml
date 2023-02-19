@@ -10,3 +10,8 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - ./db:/docker-entrypoint-initdb.d:ro
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379

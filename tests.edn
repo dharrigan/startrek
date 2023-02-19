@@ -1,5 +1,4 @@
-#kaocha/v1
-{:plugins [:kaocha.plugin/junit-xml]
- :reporter [kaocha.report/documentation]
- :fail-fast? false
- :kaocha.plugin.junit-xml/target-file "target/junit.xml"}
+#kaocha/v1 {:plugins [:kaocha.plugin/junit-xml]
+            :reporter [kaocha.report/documentation]
+            :fail-fast? false
+            :kaocha.plugin.junit-xml/target-file "target/junit.xml"}

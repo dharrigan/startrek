@@ -2,12 +2,13 @@
   {:author "David Harrigan"}
   (:require
    [clojure.string :refer [blank?]]
+   [clojure.test :refer [use-fixtures]]
    [expectations.clojure.test :as t :refer [defexpect expect expecting in]]
    [startrek.test.generators :as gen]
    [startrek.test.helper :as th]))
 
-(t/use-fixtures :once th/before-all)
-(t/use-fixtures :each th/before-each)
+(use-fixtures :once th/before-all)
+(use-fixtures :each th/before-each)
 
 (def ^:private public-starships-api "/api/public/starships")
 (def ^:private private-starships-api "/api/private/starships")

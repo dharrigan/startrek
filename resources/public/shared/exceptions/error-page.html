@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{ui.lcars.error.title}">An error has occured!</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        <!-- SCRIPTS -->
+        <script src="/assets/js/jquery-3.6.3.min.js"></script>
+        <script src="/assets/bootstrap-5.2.3-dist/js/bootstrap.bundle.js"></script>
+
+        <!-- STYLES -->
+        <link rel="stylesheet" href="/assets/bootstrap-5.2.3-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/assets/css/styles.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row mt-4 mb-2">
+                <div class="col">
+                    <div class="text-center">
+                        <img class="rounded mx-auto d-block" src="/assets/images/daffy-duck-sad.jpg" width="410" height="508"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-2 fw-bold">
+                    <span th:text="#{ui.lcars.error.code}">Code</span>:
+                </div>
+                <div class="col-lg-2">
+                    <span th:text="${code}">PLA90010</span>
+                </div>
+                <div class="col-lg-4"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-2 fw-bold">
+                    <span th:text="#{ui.lcars.error.message}">Message</span>:
+                </div>
+                <div class="col-lg-4">
+                    <span th:text="${message}">Sorry, the database is currently unavailable</span>.
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-2 fw-bold">
+                    <span th:text="#{ui.lcars.error.reference}">Reference</span>:
+                </div>
+                <div class="col-lg-4">
+                    <span th:text="${reference}">41ad0a7d-3c1a-4b22-9fdc-2d173adffed5</span>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+        </div>
+    </body>
+</html>

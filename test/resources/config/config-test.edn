@@ -6,9 +6,19 @@
                 :host #or [#env PLATFORM_DB_HOST "localhost"]
                 :port 5432
                 :username "theborg"
-                :password "resistanceisfutile"}}
+                :password "resistanceisfutile"}
+           :redis {:sessions {:uri "redis://localhost/0"}}}
 
- :runtime-config {:environment :local
-                  :cors {:allow-origin "localhost"}
+ :runtime-config {:db {:migration-locations ["db/migration/postgresql"]}
+                  :cookies {:secure? false
+                            :session-cookie-name "lcars-session"
+                            :token-cookie-name "lcars-token"}
+                  :core-control {:keep-previous-session? true}
+                  :cors {:allow-origin "http://localhost"}
+                  :environment :local
                   :jetty {:port 8080}
-                  :jmxmp {:port 5555}}}
+                  :jmxmp {:port 5555}
+                  :thymeleaf {:prefix "public/"
+                              :suffix ".html"
+                              :cacheable? false
+                              :cache-ttl-ms 0}}}

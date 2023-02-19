@@ -15,15 +15,19 @@
    [ring.middleware.cookies :as cookies]
    [startrek.api.general.handler :as general-handler]
    [startrek.api.general.routes :as general]
-   [startrek.api.middleware.app-config :as app-config]
-   [startrek.api.middleware.cors :as cors]
-   [startrek.api.middleware.exceptions :as exceptions]
-   [startrek.api.middleware.locales :as locales]
-   [startrek.api.middleware.metrics :as metrics]
-   [startrek.api.middleware.sessions :as sessions]
-   [startrek.api.middleware.transactions :as transactions]
    [startrek.api.routes :as api]
-   [startrek.api.utils.constants :refer [application-json]])
+   [startrek.shared.constants :refer [application-json]]
+   [startrek.shared.middleware.app-config :as app-config]
+   [startrek.shared.middleware.cors :as cors]
+   [startrek.shared.middleware.exceptions :as exceptions]
+   [startrek.shared.middleware.headers :as headers]
+   [startrek.shared.middleware.locales :as locales]
+   [startrek.shared.middleware.metrics :as metrics]
+   [startrek.shared.middleware.query-string :as query-string]
+   [startrek.shared.middleware.sessions :as sessions]
+   [startrek.shared.middleware.transactions :as transactions]
+   [startrek.shared.middleware.ui-exceptions :as ui-exceptions]
+   [startrek.ui.routes :as ui])
   (:import
    [org.eclipse.jetty.server Server]))
 
@@ -31,11 +35,18 @@
 
 (defn ^:private routes
   []
-  [["" {:swagger {:tags ["Startrek API"]}} (api/routes)]
+  [;;
+   ;; User Interface
+   ;;
+   ["" {:tag :ui :swagger {:tags ["User Interface"]} :no-doc true} (ui/routes)]
+   ;;
+   ;; Startrek API
+   ;;
+   ["" {:tag :api :swagger {:tags ["Startrek API"]}} (api/routes)]
    ;;
    ;; put other routes below that are *not* to live under the `/api` endpoint
    ;;
-   ["" {:no-doc true} (general/routes)]])
+   ["" {:tag :general :swagger {:tags ["General Routes"]} :no-doc true} (general/routes)]])
 
 (def ^:private custom-serialization
   (m/create
@@ -44,39 +55,43 @@
        (assoc-in [:formats application-json :decoder-opts] {:decode-key-fn (comp keyword csk/->kebab-case)})))) ;; json -> clojure
 
 (defn ^:private router
-  []
+  [app-config]
   (ring/router
    (routes)
    {:validate rs/validate
-    :data {:coercion rcm/coercion
+    :data {:app-config app-config
+           :coercion rcm/coercion
            :muuntaja custom-serialization
            :middleware [swagger/swagger-feature
                         cors/cors-middleware
                         muuntaja/format-middleware
-                        exceptions/exceptions-middleware
                         metrics/metrics-middleware
+                        ui-exceptions/ui-exceptions-middleware
+                        exceptions/exceptions-middleware
                         parameters/parameters-middleware
                         coercion/coerce-request-middleware
                         coercion/coerce-response-middleware
                         cookies/wrap-cookies
+                        headers/headers-middleware
+                        query-string/query-string-middleware
                         transactions/transactions-middleware]}}))
 
 (defn ^:private static-ring-handler
   [app-config]
-  (ring/ring-handler (router)
+  (ring/ring-handler (router app-config)
                      (ring/routes
                       (ring/create-resource-handler {:path "/" :not-found-handler general-handler/not-found})
                       (ring/create-default-handler))
                      {:middleware [[app-config/app-config-middleware app-config] ;; theses middlewares are applied before any other middleware. They are "global" so to speak...
                                    [locales/locales-middleware]
-                                   [sessions/sessions-middleware]]}))
+                                   [sessions/sessions-middleware app-config]]}))
 
 (defn ^:private repl-friendly-ring-handler
   [app-config]
   (fn [request]
     ((static-ring-handler app-config) request)))
 
-;; Donut Lifecycle Functions
+;; DONUT LIFECYCLE FUNCTIONS ↓
 
 (defn start
   [{{:keys [environment jetty]} :runtime-config :as app-config}]

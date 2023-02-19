@@ -6,9 +6,9 @@
    [clojure.test :as test]
    [donut.system :as ds]
    [ring.mock.request :as mock]
-   [startrek.api.utils.constants :as constants]
    [startrek.core.security.interface :as security]
    [startrek.router :as router]
+   [startrek.shared.constants :as constants]
    [startrek.test.fixtures :as fixtures]))
 
 (set! *warn-on-reflection* true)

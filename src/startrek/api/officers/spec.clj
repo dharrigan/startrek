@@ -3,8 +3,8 @@
 
 (set! *warn-on-reflection* true)
 
-(def ^:private login-response
+(def ^:private LoginResponse
   [:map
    [:login/session-id :string]])
 
-(def post-login-response login-response)
+(def post-login-response LoginResponse)

@@ -9,6 +9,14 @@
   [config]
   (config/apply-defaults config))
 
+(defn keep-previous-session?
+  [app-config]
+  (config/keep-previous-session? app-config))
+
+(defn cookies
+  [app-config]
+  (config/cookies app-config))
+
 (defn cors
   [app-config]
   (config/cors app-config))

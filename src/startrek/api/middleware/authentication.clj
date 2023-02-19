@@ -36,9 +36,9 @@
       (throw-unauthorized-exception authentication-errors/missing-or-invalid-basic-credentials))))
 
 (defn ^:private token-authentication
-  [request session-id]
+  [{:keys [app-config] :as request} session-id]
   (log/debugf "Performing TOKEN authentication for session '%s'." session-id)
-  (security/token-authentication {:session-id session-id}))
+  (security/token-authentication {:session-id session-id} app-config))
 
 (defn ^:private wrap-token-authentication
   [handler]

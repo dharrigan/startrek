@@ -11,11 +11,11 @@ _default:
 
 # Upgrade dependencies
 @deps:
-    clj -X:antq
+    clojure -X:antq
 
 # Checks (or formats) the source code
 @format action="check" files="":
-    clj -M:{{action}} {{files}}
+    clojure -M:{{action}} {{files}}
 
 # Test the application
 @test:
@@ -33,13 +33,25 @@ _default:
 @publish: build imagify
     bin/publish
 
-# Run Docker services, e.g., PostgreSQL...
+# Run the Docker services, e.g., PostgreSQL, Redis...
 @up:
     docker compose -f scripts/docker/docker-compose-services.yml up
 
-# Stop running Docker services
+# Stop running the Docker services
 @down:
     docker compose -f scripts/docker/docker-compose-services.yml down
+
+# Install pre-commit (https://pre-commit.com/)
+@pre-commit-install:
+    pre-commit install
+
+# Run pre-commit hooks (to verify at any point, not just on commit)
+@pre-commit-run hook-id="":
+    pre-commit run --all-files {{hook-id}}
+
+# Drops and recreates the startrek database
+@recreate-startrek:
+    psql -h localhost -d postgres -U postgres -f scripts/sql/200-drop-create-startrek-db.sql
 
 # Run the UberJAR locally
 @run-local: build

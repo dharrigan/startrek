@@ -3,4 +3,4 @@
 bin/build
 bin/imagify
 
-docker push docker.harrigan.online/clojure/startrek-donut:latest
+docker push docker.harrigan.online/clojure/startrek:latest

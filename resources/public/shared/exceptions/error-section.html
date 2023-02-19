@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <section>
+        <div id="errorModal" class="modal show" data-bs-toggle="modal" data-bs-target="#errorModal" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header text-white bg-danger">
+                        <h5 data-testid="error.title" class="modal-title fw-bold" th:text="#{ui.lcars.error.title}">An error has occured!</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row mb-2">
+                                <div class="col fw-bold">
+                                    <span data-testid="error.code.key" th:text="#{ui.lcars.error.code}">Code</span>:
+                                </div>
+                                <div class="col-10">
+                                    <span data-testid="error.code.value" th:text="${code}">PLA90010</span>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col fw-bold">
+                                    <span data-testid="error.message.key" th:text="#{ui.lcars.error.message}">Message</span>:
+                                </div>
+                                <div class="col-10">
+                                    <span data-testid="error.message.value" th:text="${message}">Sorry, the database is currently unavailable</span>.
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col fw-bold">
+                                    <span data-testid="error.reference.key" th:text="#{ui.lcars.error.reference}">Reference</span>:
+                                </div>
+                                <div class="col-10">
+                                    <span data-testid="error.reference.value" th:text="${reference}">41ad0a7d-3c1a-4b22-9fdc-2d173adffed5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-testid="error.close.button" type="button" class="btn btn-primary" data-bs-dismiss="modal" th:text="#{ui.lcars.close.button}">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</html>

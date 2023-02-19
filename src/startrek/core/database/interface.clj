@@ -12,12 +12,6 @@
   ([datasource sql opts]
    (db/execute datasource sql opts)))
 
-(defn insert
-  ([datasource table data]
-   (insert datasource table data {}))
-  ([datasource table data opts]
-   (db/insert datasource table data opts)))
-
 (defn select
   "`sql` select many rows from the `datasource`."
   ([datasource sql]

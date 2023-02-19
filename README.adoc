@@ -22,24 +22,27 @@ endif::[]
 
 == Introduction
 
-This is a very small, yet surprisingly complete, example of using
-Clojure to serve up a RESTful API. It uses a variety of technologies
-to demonstrate how this is possible. The project offers a full CRUD
-(Create, Read, Update and Delete) experience over some Star Trek
-starships!
+This is a very small, yet surprisingly complete, example of using Clojure to
+serve up a RESTful API and to provide a user interface using Thymeleaf and
+HTMX. It uses a variety of technologies to demonstrate how this is possible.
+The project offers a full API CRUD (Create, Read, Update and Delete)
+experience over some Star Trek starships!
 
 == Features
 
-* CRUD Functionality
-* Exception Handling
+* API CRUD Functionality
+* Login and view for the UI (Delete and Create/Update coming soon!)
+* Exception Handling (both RESTful and for the UI)
 * Internationalisation (i18n)
 * Swagger API
 * Input Validation (using https://github.com/metosin/malli[Malli])
+* https://www.thymeleaf.org[Thymeleaf] to render webpages
+* https://htmx.org[HTMX] to provide user interaction via the UI.
 
 === Star Trek
 
-This backend is written in Clojure and uses a PostgreSQL database to
-store a list of starships. The technologies in play include:
+This backend is written in Clojure and uses a PostgreSQL database to store a
+list of starships. The technologies in play include:
 
 * https://github.com/metosin/reitit[reitit]
 * https://github.com/seancorfield/next-jdbc[next-jdbc]
@@ -49,27 +52,52 @@ store a list of starships. The technologies in play include:
 * https://github.com/flyway/flyway[flyway database migration]
 * https://babashka.org/[babashka (for some gentle scripting)]
 
+The frontend is rendered using:
+
+* https://www.thymleaf.org[thymeleaf]
+* https://www.htmx.org[htmx]
+
 *Additionally:*
 
 * https://cljdoc.org/d/metosin/reitit/0.5.18/doc/advanced/dev-workflow[Uses a dynamic (repl-friendly) reitit dev workflow]
-* Also includes tests (including transaction rollbacks per test)!
+* Also includes tests (including transactional rollbacks per test)!
 
-A full list of the technologies that are used can be found in the
-`deps.edn` file.
+A full list of the technologies that are used can be found in the `deps.edn`
+file.
 
 This service also exposes
-https://prometheus.io/docs/introduction/overview/[Prometheus] metrics
-*AND* a JMX endpoint for your enjoyment!
+https://prometheus.io/docs/introduction/overview/[Prometheus] metrics *AND* a
+JMX endpoint for your enjoyment!
 
 === Engage!
 
+[IMPORTANT]
+====
+If you want to use the supplied `Justfile`, you'll need to have
+https://github.com/casey/just/blob/master/justfile[just] installed.
+====
+
 There are at least 3 ways to launch this project:
+
+[IMPORTANT]
+====
+You need to have the database and cache services running first (in
+a separate terminal). The command to do this, if you have `just` installed is
+`just up`, or if you don't have `just` installed, you can do
+
+* `docker compose -f scripts/docker/docker-compose-services.yml up`
+====
+
+Now, then for the first option:
 
 ==== Option 1
 
-IMPORTANT: You need to copy the `resources/config/config-example.edn`
-to `resources/config/config-local.edn` and modify, for example, if you
-are connecting to your own PostgreSQL instance.
+[IMPORTANT]
+====
+You need to copy the `resources/config/config-example.edn` to
+`resources/config/config-local.edn` and modify, for example, if you are
+connecting to your own PostgreSQL instance.
+====
 
 Fire up your repl using:
 
@@ -83,13 +111,12 @@ to start the system.
 
 ==== Option 2
 
-IMPORTANT: You need to copy the `resources/config/config-example.edn`
-to `resources/config/config-local.edn` and modify, for example, if you
-are connecting to your own PostgreSQL instance.
-
-IMPORTANT: If you want to use the `.justfile`, you'll need
-https://github.com/casey/just/blob/master/justfile[just] installed.
-It's great btw!
+[IMPORTANT]
+====
+You need to copy the `resources/config/config-example.edn` to
+`resources/config/config-local.edn` and modify, for example, if you are
+connecting to your own PostgreSQL instance.
+====
 
 * `just run-local`
 
@@ -100,13 +127,12 @@ or
 
 ==== Option 3
 
-IMPORTANT: You don't need to copy any config file, as the docker
-container is configured to use `config/config-example.edn`, and thus
-this is the one by the application.
-
-IMPORTANT: If you want to use the `.justfile`, you'll need
-https://github.com/casey/just/blob/master/justfile[just] installed.
-It's great btw!
+[IMPORTANT]
+====
+You don't need to copy any config file, as the docker container is configured
+to use `config/config-example.edn`, and thus this is the one by the
+application.
+====
 
 * `just run-docker`
 
@@ -121,7 +147,10 @@ Once the service is up and running (and listening by default on port 8080),
 there are a few examples of interrogating the API to pull back some data. The
 scripts can be found in `scripts/bb`.
 
-IMPORTANT: You will need https://babashka.org/[Babashka] installed.
+[IMPORTANT]
+====
+You will need https://babashka.org/[Babashka] installed.
+====
 
 To run a script just execute them on the command line, i.e.,
 `./find-all-starships.clj`
@@ -130,6 +159,11 @@ If you have https://github.com/borkdude/jet[jet] installed, you can convert
 the EDN response to JSON like so:
 
 `./find-all-starships.clj | jet -o json`
+
+== Logging in via the UI
+
+Open up a browser and visit `http://localhost:8080/` From that page, click on
+the `login` link. The username and password has been pre-filled in for you.
 
 == License
 
@@ -147,9 +181,9 @@ means.
 
 == Feedback
 
-I welcome feedback. I can usually be found hanging out in the `#clojure-uk`
-channel on https://clojurians.slack.com[Clojurians] Slack. You can also email
-me if you wish :-)
+I welcome feedback. I can usually be found hanging out in the `#clojure-uk` or
+`#clojure-europe` channels on https://clojurians.slack.com[Clojurians] Slack.
+You can also email me if you wish :-)
 
 == Finally!
 

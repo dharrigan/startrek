@@ -22,11 +22,11 @@
   ([env]
    (reset! environment env)
    (try
-    (donut/start)
-    :ready-to-rock-and-roll
-    (catch ExceptionInfo e
-      (log/error (ex-data e))
-      :bye-bye))))
+     (donut/start)
+     :ready-to-rock-and-roll
+     (catch ExceptionInfo e
+       (log/error (ex-data e))
+       :bye-bye))))
 
 (defn stop
   []

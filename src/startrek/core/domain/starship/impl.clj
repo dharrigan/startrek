@@ -43,10 +43,10 @@
 
 (defn search
   [query {:keys [db] :as app-config}]
-  (log/infof "Finding starships using query '%s'." query)
+  (log/infof "Finding starships using query '%s'." (or query {}))
   (when-let [results (->> (search-sql query)
                           (db/select-many db))]
-    (log/infof "Found '%d' starships(s) using query '%s'." (count results) query)
+    (log/infof "Found '%d' starships(s) using query '%s'." (count results) (or query {}))
     results))
 
 (defn ^:private create-sql

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" th:fragment="layout (content, navBarSelection)" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{lcarsHeader :: lcars-header(~{::title})}">
+        <title th:text="#{ui.lcars.title}">LCARS</title>
+    </head>
+    <body>
+        <div id="systemMessage"></div>
+        <div class="container-xxl">
+            <div th:replace="~{lcarsNavbar :: navbar-container(${navBarSelection})}">Navigation Bar</div>
+            <div th:replace="${content}"><p>Content</p> </div>
+            <footer><div th:replace="~{lcarsFooter}">Footer</div></footer>
+        </div>
+    </body>
+</html>

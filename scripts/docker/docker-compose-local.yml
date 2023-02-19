@@ -3,7 +3,7 @@
 services:
 
   startrek:
-    image: startrek-donut:latest
+    image: startrek:latest
     ports:
       - "8080:8080"   # HTTP
       - "9080:9080"   # Prometheus JMX Exporter

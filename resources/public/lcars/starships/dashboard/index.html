@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{lcarsBase :: layout(~{::section}, #{ui.lcars.navigation.bar.fleet})}" xmlns:th="http://www.thymeleaf.org">
+    <section>
+        <div class="row">
+            <div class="col py-2">
+                <button class="btn btn-primary flex-fill" type="button">
+                    <i class="material-icons float-start">add</i>
+                    <span th:text="#{ui.lcars.add.starship}">Add Starship (coming soon!)</span>
+                </button>
+            </div>
+        </div>
+        <div class="mt-3">
+            <div th:replace="~{starshipsTable :: table(${starships})}"></div>
+        </div>
+    </section>
+</html>

@@ -5,6 +5,8 @@
    [clojure.java.io :as io]
    [clojure.tools.logging :as log]
    [donut.system :as ds]
+   [startrek.core.aux.thymeleaf.impl :as thymeleaf]
+   [startrek.core.cache.impl :as cache]
    [startrek.core.config.interface :as config]
    [startrek.core.database.impl :as db]
    [startrek.core.jmxmp.impl :as jmxmp]
@@ -33,18 +35,28 @@
   {::ds/defs
    {:env {}
     :app-config {:db #::ds{:start (fn [{:keys [::ds/config]}] (db/start config))
-                           :post-start (fn [{:keys [::ds/instance]}] (db/post-start instance ["db/migration/postgresql"]))
+                           :post-start (fn [{:keys [::ds/instance ::ds/config]}] (db/post-start instance config))
                            :stop (fn [{:keys [::ds/instance]}] (db/stop instance))
-                           :config (ds/ref [:env :secrets :db])}
+                           :config {:db (ds/ref [:env :secrets :db])
+                                    :runtime-config (ds/ref [:env :runtime-config])}}
+
+                 :sessions-cache #::ds{:start (fn [{:keys [::ds/config]}] (cache/start config))
+                                       :stop (fn [{:keys [::ds/instance]}] (cache/stop instance))
+                                       :config (ds/ref [:env :secrets :redis :sessions])}
 
                  :router #::ds{:start (fn [{:keys [::ds/config]}] (router/start config))
                                :stop (fn [{:keys [::ds/instance]}] (router/stop instance))
                                :config {:db (ds/ref [:app-config :db])
-                                        :runtime-config (ds/ref [:env :runtime-config])}}
+                                        :runtime-config (ds/ref [:env :runtime-config])
+                                        :sessions-cache (ds/ref [:app-config :sessions-cache])
+                                        :template-engine (ds/ref [:app-config :thymeleaf])}}
 
                  :jmxmp #::ds{:start (fn [{:keys [::ds/config]}] (jmxmp/start config))
                               :stop (fn [{:keys [::ds/instance]}] (jmxmp/stop instance))
-                              :config (ds/ref [:env :runtime-config :jmxmp])}}}})
+                              :config (ds/ref [:env :runtime-config :jmxmp])}
+
+                 :thymeleaf #::ds{:start (fn [{:keys [::ds/config]}] (thymeleaf/start config))
+                                  :config (ds/ref [:env :runtime-config :thymeleaf])}}}})
 
 (defmethod ds/named-system :base
   [_]
@@ -61,8 +73,9 @@
 (defmethod ds/named-system :test
   [_]
   (ds/system :base {[:env] (load-config :test)
+                    [:app-config :jmxmp] ::disabled
                     [:app-config :router] ::disabled
-                    [:app-config :jmxmp] ::disabled}))
+                    [:app-config :runtime-config] (ds/ref [:env :runtime-config])}))
 
 (defmethod ds/named-system :staging
   [_]

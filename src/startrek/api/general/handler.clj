@@ -4,8 +4,8 @@
    [iapetos.collector.ring :as ring]
    [reitit.swagger-ui :as swagger-ui]
    [ring.util.response :as response]
-   [startrek.api.middleware.metrics :as metrics]
-   [startrek.api.utils.platform :as platform-utils]))
+   [startrek.shared.middleware.metrics :as metrics]
+   [startrek.shared.utils.platform :as platform-utils]))
 
 (set! *warn-on-reflection* true)
 

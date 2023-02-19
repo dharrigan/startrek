@@ -1,14 +1,11 @@
 (ns startrek.core.database.impl
   {:author "David Harrigan"}
   (:require
-   [camel-snake-kebab.core :as csk]
-   [camel-snake-kebab.extras :as csk-extras]
    [clojure.tools.logging :as log]
    [next.jdbc :as jdbc]
    [next.jdbc.connection :as connection]
    [next.jdbc.date-time] ;; https://github.com/seancorfield/next-jdbc/blob/a568f0fa87b4216941bfefbf3e86f2b182592ff7/src/next/jdbc/date_time.clj#L30
    [next.jdbc.result-set :refer [as-kebab-maps]]
-   [next.jdbc.sql :as jdbc-sql]
    [startrek.core.database.database-errors :as database-errors :refer [generic-database-error]]
    [startrek.core.database.migration :as migration]
    [startrek.core.errors.interface :as errors :refer [throw-database-exception]])
@@ -30,18 +27,6 @@
      (catch Exception exception
        (log/error exception)
        (throw-database-exception (generic-database-error exception sql opts))))))
-
-(defn insert
-  [datasource table data opts]
-  (log/tracef "Inserting '%s into '%s'." data table)
-  (try
-    (let [data' (csk-extras/transform-keys csk/->snake_case_keyword data)]
-      (when-let [results (jdbc-sql/insert! datasource (csk/->snake_case_keyword table) data' (merge {:builder-fn as-kebab-maps} opts))]
-        (log/tracef "JDBC result '%s'." results)
-        results))
-    (catch Exception exception
-      (log/error exception)
-      (throw-database-exception (generic-database-error exception data opts)))))
 
 (defn select
   ([datasource sql] (select datasource sql {}))
@@ -67,19 +52,17 @@
        (log/error exception)
        (throw-database-exception (generic-database-error exception sql opts))))))
 
-;; Donut Lifecycle Functions
+;; DONUT LIFECYCLE FUNCTIONS ↓
 
-(defn start
-  "Start a connection pool to the datsource defined in the `config`."
-  ^HikariDataSource [config]
-  (connection/->pool HikariDataSource (merge config additional-config)))
+(defn start ^HikariDataSource
+  [{:keys [db] :as config}]
+  (connection/->pool HikariDataSource (merge db additional-config)))
 
 (defn post-start
-  "Migrate the database."
-  [^HikariDataSource datasource migration-locations]
-  (migration/migrate datasource migration-locations))
+  [^HikariDataSource datasource config]
+  (let [{{{:keys [migration-locations]} :db} :runtime-config} config]
+    (migration/migrate datasource migration-locations)))
 
 (defn stop
-  "Stop the connection poool for the specified `datasource."
   [^HikariDataSource datasource]
   (.close datasource))

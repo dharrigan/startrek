@@ -9,6 +9,10 @@
   [credentials app-config]
   (security/basic-authentication credentials app-config))
 
+(defn cookie-authentication
+  [credentials app-config]
+  (security/cookie-authentication credentials app-config))
+
 (defn token-authentication
-  [credentials]
-  (security/token-authentication credentials))
+  [credentials app-config]
+  (security/token-authentication credentials app-config))

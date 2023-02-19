@@ -2,8 +2,8 @@
   {:author "David Harrigan"}
   (:require
    [ring.util.response :refer [not-found response status]]
-   [startrek.api.utils.constants :refer [created]]
-   [startrek.core.errors.interface :refer [throw-resource-does-not-exist-exception]]))
+   [startrek.core.errors.interface :refer [throw-resource-does-not-exist-exception]]
+   [startrek.shared.constants :refer [created]]))
 
 (set! *warn-on-reflection* true)
 

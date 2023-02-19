@@ -1,0 +1,4 @@
+;;
+;; i18n en validation messages
+;;
+{:email.format.invalid "VAL10000::Sorry, email address '%s' has an incorrect format"}

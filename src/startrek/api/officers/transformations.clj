@@ -8,3 +8,7 @@
 (defn post-login-success->response
   [{{:keys [session-id]} :identity :as request}]
   (response/response #:login{:session-id session-id}))
+
+(defn logout->response
+  []
+  (response/response nil))

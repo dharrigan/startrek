@@ -2,8 +2,8 @@
 ;; i18n pl api messages
 ;;
 {:database.unavailable "STAR90020::Przepraszamy, baza danych jest obecnie niedostępna!"
- :general.exception "STAR00010::Przepraszamy, wystąpił błąd podczas przetwarzania!\n!"
- :http.internal-server-error "STAR10500::Przepraszamy, wystąpił błąd serwera HTTP z powodu\n '%s'!"
+ :general.exception "STAR00010::Przepraszamy, wystąpił błąd podczas przetwarzania!!"
+ :http.internal-server-error "STAR10500::Przepraszamy, wystąpił błąd serwera HTTP z powodu '%s'!"
  :missing.or.invalid.basic.credentials "STAR30010::Nieprawidłowe hasło lub nazwa użytkownika"
  :missing.or.invalid.token.credentials "STAR30020::Nieprawidłowe hasło lub nazwa użytkownika"
  :resource.does.not.exist "STAR20010::Przepraszamy, rzecz '%s' with id '%s' nie istnieje!"

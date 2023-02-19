@@ -6,7 +6,7 @@
 
 (set! *warn-on-reflection* true)
 
-;; Donut Lifecycle Functions
+;; DONUT LIFECYCLE FUNCTIONS ↓
 
 #_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
 (defn start
@@ -16,7 +16,7 @@
   (doto
    (JMXConnectorServerFactory/newJMXConnectorServer
     (JMXServiceURL. "jmxmp" "0.0.0.0" (or port 0)) nil (ManagementFactory/getPlatformMBeanServer))
-    (.start)))
+   (.start)))
 
 #_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
 (defn stop
