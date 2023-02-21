@@ -1,48 +1,46 @@
 ---
 
-image: clojure:openjdk-19-alpine
+image: docker.harrigan.online/clojure/docker:latest
 
-# Due to a GitLab bug we need to extend the cache for each job
-# rather than rely on a top level cache with a per job policy.
-# https://gitlab.com/gitlab-org/gitlab-runner/issues/2838
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+  GITLIBS: ".gitlibs"
 
+# I don't think this cache thing works..., so I've disabled it for now.
 .cache:
+  before_script:
+    - sed -i 's,;;CI ,,g' deps.edn
   cache:
-    key: "${CI_COMMIT_REF_NAME}"
+    key:
+      files:
+        - deps.edn
     paths:
-      - .cpcache/
-      - /root/.m2/
-    policy: pull-push
+      - .cpcache
+      - .gitlibs
+      - .m2/repository
 
 stages:
   - package
   - publish
 
-variables:
-  DOCKER_TLS_CERTDIR: "/certs"
-
 services:
-  - docker:dind
+  - name: docker:dind
+    command: ["--registry-mirror", "https://docker.harrigan.online"]
 
 package:
-  extends: .cache
+  #extends: .cache
   stage: package
   script:
-    - apk add --no-cache just
     - just build
-  cache:
-    policy: pull
   artifacts:
     paths:
       - target/app.jar
     expire_in: 1 day
 
 publish:
-  extends: .cache
   stage: publish
   dependencies:
     - package
-  image: docker.harrigan.online/docker:latest
   variables:
     DOCKER_CONFIG: /root/.docker
   before_script:
@@ -50,8 +48,6 @@ publish:
     - echo "$DOCKER_AUTH_CONFIG" > $DOCKER_CONFIG/config.json
   script:
     - just imagify publish
-  cache:
-    policy: pull
   only:
     - master
   except:

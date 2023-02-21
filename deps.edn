@@ -27,7 +27,7 @@
         metosin/jsonista {:mvn/version "0.3.7"}
         metosin/malli {:mvn/version "0.10.1"}
         metosin/muuntaja {:mvn/version "0.6.8"}
-        metosin/reitit {:mvn/version "0.5.18" :exclusions [metosin/reitit-sieppari metosin/reitit-dev]}
+        metosin/reitit {:mvn/version "0.6.0" :exclusions [metosin/reitit-sieppari metosin/reitit-dev]}
         org.clojure/tools.cli {:mvn/version "1.0.214"}
         org.clojure/tools.logging {:mvn/version "1.2.4"}
         org.flywaydb/flyway-core {:mvn/version "9.15.0"}
