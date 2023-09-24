@@ -68,7 +68,11 @@
            :antq {:replace-deps {com.github.liquidz/antq {:mvn/version "2.6.1121"}
                                  org.slf4j/slf4j-nop {:mvn/version "2.0.9"}}
                   :exec-fn antq.tool/outdated
-                  :exec-args {:download true
+                  :exec-args {;;
+                              ;;
+                              :exclude [info.sunng/ring-jetty9-adapter]
+                              ;;
+                              :download true
                               :force true
                               :no-changes true
                               :upgrade true
