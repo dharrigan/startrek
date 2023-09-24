@@ -4,8 +4,8 @@
         <div th:fragment="table (starships)">
             <div id="viewStarship"></div>
             <div class="table-responsive">
-                <table id="starshipsTable" class="display dataTable w-100">
-                    <thead>
+                <table id="starshipsTable" class="table display dataTable table-hover w-100">
+                    <thead class="table-light">
                         <tr class="align-middle">
                             <th aria-controls="starshipsTable" rowspan="1" colspan="1"></th>
                             <th class="sorting" aria-controls="starshipsTable" rowspan="1" colspan="1" th:text="#{ui.lcars.uuid}">UUID</th>
@@ -17,7 +17,7 @@
                             <th class="sorting" aria-controls="starshipsTable" rowspan="1" colspan="1" th:text="#{ui.lcars.registry}">Registry</th>
                         </tr>
                     </thead>
-                    <tbody th:with="dateFormat=#{ui.lcars.date.format}">
+                    <tbody class="table-group-divider" th:with="dateFormat=#{ui.lcars.date.format}">
                         <tr class="align-middle" th:each="starship : ${starships}">
                             <td class="align-middle text-center">
                                 <button class="btn btn-primary" type="button" th:text="#{ui.lcars.view.button}" th:hx-get="'starships/'+ ${starship.uuid}" hx-target="#viewStarship">View</button>
