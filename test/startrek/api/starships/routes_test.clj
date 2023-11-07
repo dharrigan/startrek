@@ -21,62 +21,55 @@
 (def ^:private password "password")
 
 (defexpect find-all-starships-test
-  (expecting
-   "Find all starships"
-   (let [{:keys [status body] :as response} (-> (th/mock-request :get public-starships-api)
-                                                (th/test-handler))
-         {:keys [starships]} body]
-     (expect 200 status)
-     (expect 7 (count starships)))))
+  (expecting "Find all starships"
+    (let [{:keys [status body] :as response} (-> (th/mock-request :get public-starships-api)
+                                                 (th/test-handler))
+          {:keys [starships]} body]
+      (expect 200 status)
+      (expect 7 (count starships)))))
 
 (defexpect find-starship-test
-  (expecting
-   "Find a starship"
-   (let [{:keys [status body] :as response} (-> (th/mock-request :get public-ncc-1701-d-request)
-                                                (th/test-handler))]
-     (expect 200 status)
-     (expect {:uuid ncc-1701-d :captain "Jean-Luc Picard"} (in body)))))
+  (expecting "Find a starship"
+    (let [{:keys [status body] :as response} (-> (th/mock-request :get public-ncc-1701-d-request)
+                                                 (th/test-handler))]
+      (expect 200 status)
+      (expect {:uuid ncc-1701-d :captain "Jean-Luc Picard"} (in body)))))
 
 (defexpect delete-starship-test
-  (expecting
-   "Delete a starship"
-   (let [{:keys [status body] :as response} (-> (th/mock-request :delete private-ncc-1701-d-request)
-                                                (th/authenticate-as riker password)
-                                                (th/test-handler))]
-     (expect 200 status)
-     (expect {:uuid ncc-1701-d} (in body)))))
+  (expecting "Delete a starship"
+    (let [{:keys [status body] :as response} (-> (th/mock-request :delete private-ncc-1701-d-request)
+                                                 (th/authenticate-as riker password)
+                                                 (th/test-handler))]
+      (expect 200 status)
+      (expect {:uuid ncc-1701-d} (in body)))))
 
 (defexpect create-starship-test
-  (expecting
-   "Create a starship"
-   (let [starship (gen/starship)
-         {:keys [status body] :as response} (-> (th/json-request starship :post private-starships-api)
-                                                (th/authenticate-as riker password)
-                                                (th/test-handler))
-         {:keys [uuid]} body]
-     (expect 201 status)
-     (expect false (blank? uuid)))))
+  (expecting "Create a starship"
+    (let [starship (gen/starship)
+          {:keys [status body] :as response} (-> (th/json-request starship :post private-starships-api)
+                                                 (th/authenticate-as riker password)
+                                                 (th/test-handler))
+          {:keys [uuid]} body]
+      (expect 201 status)
+      (expect false (blank? uuid)))))
 
 (defexpect modify-starship-test
-  (expecting
-   "Create a starship"
-   (let [starship (gen/starship)
-         {:keys [status body] :as response} (-> (th/json-request starship :post private-starships-api)
-                                                (th/authenticate-as riker password)
-                                                (th/test-handler))
-         {:keys [uuid]} body]
-     (expect 201 status)
-     (expect false (blank? uuid))
-     (expecting
-      "Find the saved starship"
-      (let [{:keys [body] :as response} (-> (th/mock-request :get (str public-starships-api "/" uuid))
+  (expecting "Create a starship"
+    (let [starship (gen/starship)
+          {:keys [status body] :as response} (-> (th/json-request starship :post private-starships-api)
+                                                 (th/authenticate-as riker password)
+                                                 (th/test-handler))
+          {:keys [uuid]} body]
+      (expect 201 status)
+      (expect false (blank? uuid))
+      (expecting "Find the saved starship"
+        (let [{:keys [body] :as response} (-> (th/mock-request :get (str public-starships-api "/" uuid))
+                                              (th/test-handler))]
+          (expect {:uuid uuid} (in body))
+          (expecting "Modify the saved starship"
+            (let [mirror-universe-starship (assoc body :captain "Evil Spock")
+                  {:keys [status body]} (-> (th/json-request mirror-universe-starship :patch (str private-starships-api "/" uuid))
+                                            (th/authenticate-as riker password)
                                             (th/test-handler))]
-        (expect {:uuid uuid} (in body))
-        (expecting
-         "Modify the saved starship"
-         (let [mirror-universe-starship (assoc body :captain "Evil Spock")
-               {:keys [status body]} (-> (th/json-request mirror-universe-starship :patch (str private-starships-api "/" uuid))
-                                         (th/authenticate-as riker password)
-                                         (th/test-handler))]
-           (expect 200 status)
-           (expect {:uuid uuid :captain "Evil Spock"} (in body)))))))))
+              (expect 200 status)
+              (expect {:uuid uuid :captain "Evil Spock"} (in body)))))))))

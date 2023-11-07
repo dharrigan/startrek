@@ -1,0 +1,6 @@
+{:remove-multiple-non-indenting-spaces? true
+ :parallel? true
+ :extra-indents {expecting [[:inner 0]]
+                 side-effects [[:inner 0]]
+                 more-of [[:inner 0]]
+                 expect [[:inner 0]]}}
