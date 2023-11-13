@@ -54,7 +54,7 @@ list of starships. The technologies in play include:
 
 The frontend is rendered using:
 
-* https://www.thymleaf.org[thymeleaf]
+* https://www.thymeleaf.org/[thymeleaf]
 * https://www.htmx.org[htmx]
 
 *Additionally:*
