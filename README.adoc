@@ -105,7 +105,7 @@ Fire up your repl using:
 
 to load up the `dev` alias defined in the `deps.edn` then
 
-* `(require 'dev)
+* `(require 'dev)`
 * `(dev/go)`
 
 to start the system.
