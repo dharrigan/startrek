@@ -53,7 +53,7 @@
 
 (defn render
   [viewname data {{:keys [template-engine]} :app-config :keys [locales] :as request}]
-  (let [context (Context. (Locale/of (name (first locales))))] ;; use the first locale as the default for rendering i18n text
+  (let [context (Context. (Locale. (name (first locales))))] ;; use the first locale as the default for rendering i18n text
     (when-let [data' (csk-extras/transform-keys csk/->camelCaseString data)]
       (.setVariables context data'))
     (.setVariable context "locales" locales)
