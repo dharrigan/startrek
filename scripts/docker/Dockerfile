@@ -1,7 +1,7 @@
 #
 # Clojure Application Dockerfile
 #
-FROM --platform=linux/amd64 eclipse-temurin:19-jre
+FROM --platform=linux/amd64 eclipse-temurin:21-jre
 
 #
 # Add in curl as it is necessary to perform the healthcheck below

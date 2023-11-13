@@ -37,9 +37,11 @@ REL_TAG_LINE="$TAG_LINE --tag $FULL_IMAGE:$REL_TAG"
 
 DOCKER_COMMAND="build --network host"
 
+WORKER="worker_bee_${APPLICATION}"
+
 if [ "$BUILDX" = true ]; then
-    docker buildx ls | grep -q worker_bee && docker buildx stop worker_bee && docker buildx rm worker_bee
-    docker buildx create --use --name worker_bee --buildkitd-flags '--allow-insecure-entitlement network.host'
+    docker buildx ls | grep -q $WORKER && docker buildx stop $WORKER && docker buildx rm $WORKER
+    docker buildx create --use --name $WORKER --buildkitd-flags '--allow-insecure-entitlement network.host'
     BUILDX_COMMAND=$(cat <<EOL
         buildx build \
             --allow network.host \
@@ -55,4 +57,4 @@ DOCKER="docker $DOCKER_COMMAND -f scripts/docker/Dockerfile --build-arg APPLICAT
 
 [[ -n "$REL_TAG" ]] && eval "$DOCKER $REL_TAG_LINE ." || eval "$DOCKER $TAG_LINE ."
 
-[[ "$BUILDX" = true ]] && docker buildx stop worker_bee && docker buildx rm worker_bee || exit 0
+[[ "$BUILDX" = true ]] && docker buildx stop $WORKER && docker buildx rm $WORKER || exit 0

@@ -9,6 +9,10 @@ set positional-arguments := true
 _default:
     @just --list
 
+# Cat the Justfile
+@cat:
+    just --dump
+
 # Upgrade dependencies
 @deps:
     clojure -X:antq
@@ -58,7 +62,7 @@ _default:
     bin/run-local
 
 # Run the Docker container locally
-@run-docker: imagify
+@run-docker:
     bin/run-docker
 
 # Build, imagify and publish the container

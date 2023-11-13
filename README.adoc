@@ -105,6 +105,7 @@ Fire up your repl using:
 
 to load up the `dev` alias defined in the `deps.edn` then
 
+* `(require 'dev)
 * `(dev/go)`
 
 to start the system.
@@ -139,6 +140,7 @@ application.
 or
 
 * `bin/build`
+* `bin/imagify`
 * `bin/run-docker`
 
 == Interrogating the API

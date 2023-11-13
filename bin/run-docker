@@ -16,9 +16,6 @@ if [ ! -f "$PWD/resources/config/config-local.edn" ]; then
     fi
 fi
 
-bin/build
-bin/imagify
-
 #
 # See the `docker-compose-X.yml` file to define which config file to use.
 #

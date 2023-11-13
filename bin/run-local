@@ -16,8 +16,6 @@ if [ ! -f "$PWD/resources/config/config-local.edn" ]; then
     fi
 fi
 
-bin/build
-
 #
 # Don't forget to rename "config/config-example.edn" to "config/config-local.edn"
 # (or config/config-staging.edn or config/config-production.edn) and then change the values
