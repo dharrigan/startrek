@@ -2,70 +2,71 @@
 # And awayyyy we go!
 #
 
-set dotenv-load := true
-set positional-arguments := true
+set dotenv-load
+set positional-arguments
+set quiet
 
 # List all recipes (_ == hidden recipe)
 _default:
-    @just --list
+    just --list
 
 # Cat the Justfile
-@cat:
+cat:
     just --dump
 
 # Upgrade dependencies
-@deps:
+deps:
     clojure -X:antq
 
 # Checks (or formats) the source code
-@format action="check" files="":
+format action="check" files="":
     clojure -M:{{action}} {{files}}
 
 # Test the application
-@test:
+test:
     bin/test
 
 # Build the application
-@build:
+build:
     bin/build
 
 # Create the Docker container
-@imagify: build
+imagify: build
     bin/imagify
 
 # Publish the Docker container
-@publish: build imagify
+publish: build imagify
     bin/publish
 
 # Run the Docker services, e.g., PostgreSQL, Redis...
-@up:
+up:
     docker compose -f scripts/docker/docker-compose-services.yml up
 
 # Stop running the Docker services
-@down:
+down:
     docker compose -f scripts/docker/docker-compose-services.yml down
 
 # Install pre-commit (https://pre-commit.com/)
-@pre-commit-install:
+pre-commit-install:
     pre-commit install
 
 # Run pre-commit hooks (to verify at any point, not just on commit)
-@pre-commit-run hook-id="":
+pre-commit-run hook-id="":
     pre-commit run --all-files {{hook-id}}
 
 # Drops and recreates the startrek database
-@recreate-startrek:
+recreate-startrek:
     psql -h localhost -d postgres -U postgres -f scripts/sql/200-drop-create-startrek-db.sql
 
 # Run the UberJAR locally
-@run-local: build
+run-local: build
     bin/run-local
 
 # Run the Docker container locally
-@run-docker:
+run-docker:
     bin/run-docker
 
 # Build, imagify and publish the container
-@all: build imagify publish
+all: build imagify publish
 
 # vim: expandtab:ts=4:sw=4:ft=just
