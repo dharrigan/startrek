@@ -26,6 +26,7 @@
      :ready-to-rock-and-roll
      (catch ExceptionInfo e
        (log/error (ex-data e))
+       (throw e)
        :bye-bye))))
 
 (defn stop
