@@ -1,7 +1,7 @@
 ;;
 ;; i18n en ui lcars messages
 ;;
-{:add.starship "Add Starship (coming soon!)"
+{:add.starship "Add Starship (not implemented yet!)"
  :affiliation "Affiliation"
  :captain "Captain"
  :class "Class"

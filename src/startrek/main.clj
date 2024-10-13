@@ -10,7 +10,7 @@
 
 (def ^:private cli-options
   [["-e" "--environment ENVIRONMENT" "Environment to use, i.e., local"
-    :default :local
+    :default (keyword (or (System/getenv "ENVIRONMENT") "local"))
     :parse-fn #(keyword %)]])
 
 #_{:clj-kondo/ignore [:clojure-lsp/unused-public-var :unused-binding]}

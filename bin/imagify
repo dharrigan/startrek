@@ -45,6 +45,7 @@ if [ "$BUILDX" = true ]; then
     BUILDX_COMMAND=$(cat <<EOL
         buildx build \
             --allow network.host \
+            --platform linux/amd64 \
             --load \
             --cache-from type=local,src=/tmp/.buildx-cache \
             --cache-to type=local,dest=/tmp/.buildx-cache,mode=max

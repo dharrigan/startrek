@@ -76,25 +76,11 @@
         body {:code code :reference (random-uuid) :message message :uri (:uri request)}]
     {:status internal-server-error :body body}))
 
-(defn ^:private format-coercion-error
-  [code message {:keys [value] :as error}]
-  (let [in (-> error :in last name)] ;; a bit brittle..., assumes only one element in the `in` vector.
-    (if (= "COER10000" code) ;; this is a coercion exception that is thrown where we haven't mapped the keys yet
-      (format message in (:message error) value)
-      (format message in value))))
-
 (defn ^:private create-coercion-handler
   [status]
-  (fn [exception {:keys [locales] :as request}]
-    (let [{:keys [errors]} (coercion/encode-error (ex-data exception))
-          {:keys [message] :as error} (first errors)
-          resolved-error-message (if (keyword? message)
-                                   (resolve-message locales message)
-                                   (resolve-message locales :coercion/general.exception))
-          {:keys [code message]} (split-error-message resolved-error-message)
-          resolved-error (format-coercion-error code message error)
-          body {:code code :reference (random-uuid) :message resolved-error :uri (:uri request)}]
-      {:status status :body body})))
+  (fn [exception {:keys [uri] :as request}]
+    (let [{:keys [humanized] :as coercion-error} (coercion/encode-error (ex-data exception))]
+      {:status status :body {:reference (random-uuid) :message humanized :uri uri}})))
 
 (def exceptions-middleware
   (exception/create-exception-middleware

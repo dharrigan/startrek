@@ -31,7 +31,7 @@ experience over some Star Trek starships!
 == Features
 
 * API CRUD Functionality
-* Login and view for the UI (Delete and Create/Update coming soon!)
+* Login and view for the UI (Delete and Create/Update not implemented yet!)
 * Exception Handling (both RESTful and for the UI)
 * Internationalisation (i18n)
 * Swagger API
@@ -59,7 +59,7 @@ The frontend is rendered using:
 
 *Additionally:*
 
-* https://cljdoc.org/d/metosin/reitit/0.5.18/doc/advanced/dev-workflow[Uses a dynamic (repl-friendly) reitit dev workflow]
+* https://cljdoc.org/d/metosin/reitit/0.7.2/doc/advanced/dev-workflow[Uses a dynamic (repl-friendly) reitit dev workflow]
 * Also includes tests (including transactional rollbacks per test)!
 
 A full list of the technologies that are used can be found in the `deps.edn`

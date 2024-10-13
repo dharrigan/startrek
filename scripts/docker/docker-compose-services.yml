@@ -11,7 +11,7 @@ services:
     volumes:
       - ./db:/docker-entrypoint-initdb.d:ro
 
-  redis:
-    image: redis:latest
+  valkey:
+    image: valkey/valkey:unstable
     ports:
-      - 6379:6379
+      - "6379:6379"
