@@ -8,41 +8,41 @@
         buddy/buddy-auth {:mvn/version "3.0.323"}
         camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.3"}
         celtuce/celtuce {:mvn/version "0.4.2"}
-        ch.qos.logback/logback-classic {:mvn/version "1.5.10"}
+        ch.qos.logback/logback-classic {:mvn/version "1.5.17"}
         cheshire/cheshire {:mvn/version "5.13.0"}
         clj-commons/iapetos {:mvn/version "0.1.14"}
         clj-http/clj-http {:mvn/version "3.13.0"}
-        clojure.java-time/clojure.java-time {:mvn/version "1.4.2"}
-        party.donut/system {:mvn/version "1.0.254"}
-        com.github.seancorfield/honeysql {:mvn/version "2.6.1196"}
-        com.github.seancorfield/next.jdbc {:mvn/version "1.3.955"}
-        com.taoensso/encore {:mvn/version "3.122.0"}
+        clojure.java-time/clojure.java-time {:mvn/version "1.4.3"}
+        party.donut/system {:mvn/version "1.0.255"}
+        com.github.seancorfield/honeysql {:mvn/version "2.6.1270"}
+        com.github.seancorfield/next.jdbc {:mvn/version "1.3.994"}
+        com.taoensso/encore {:mvn/version "3.137.5"}
         com.taoensso/tempura {:mvn/version "1.5.4"}
-        com.zaxxer/HikariCP {:mvn/version "6.0.0"}
+        com.zaxxer/HikariCP {:mvn/version "6.2.1"}
         de.mkammerer/argon2-jvm {:mvn/version "2.11"}
-        info.sunng/ring-jetty9-adapter {:mvn/version "0.35.1"}
-        io.lettuce/lettuce-core {:mvn/version "6.4.0.RELEASE"}
+        info.sunng/ring-jetty9-adapter {:mvn/version "0.36.1"}
+        io.lettuce/lettuce-core {:mvn/version "6.5.4.RELEASE"}
         io.prometheus/simpleclient {:mvn/version "0.16.0"}
         io.prometheus/simpleclient_hotspot {:mvn/version "0.16.0"}
-        metosin/jsonista {:mvn/version "0.3.11"}
-        metosin/malli {:mvn/version "0.16.4"}
-        metosin/muuntaja {:mvn/version "0.6.10"}
+        metosin/jsonista {:mvn/version "0.3.13"}
+        metosin/malli {:mvn/version "0.17.0"}
+        metosin/muuntaja {:mvn/version "0.6.11"}
         metosin/reitit {:mvn/version "0.7.2" :exclusions [metosin/reitit-sieppari metosin/reitit-dev]}
         org.clojure/tools.cli {:mvn/version "1.1.230"}
         org.clojure/tools.logging {:mvn/version "1.3.0"}
-        org.flywaydb/flyway-core {:mvn/version "10.19.0"}
-        org.flywaydb/flyway-database-postgresql {:mvn/version "10.19.0"}
+        org.flywaydb/flyway-core {:mvn/version "11.3.4"}
+        org.flywaydb/flyway-database-postgresql {:mvn/version "11.3.4"}
         org.glassfish.external/opendmk_jmxremote_optional_jar {:mvn/version "1.0-b01-ea"}
-        org.postgresql/postgresql {:mvn/version "42.7.4"}
-        org.slf4j/jcl-over-slf4j {:mvn/version "2.0.16"}
-        org.slf4j/jul-to-slf4j {:mvn/version "2.0.16"}
-        org.slf4j/log4j-over-slf4j {:mvn/version "2.0.16"}
-        org.slf4j/slf4j-api {:mvn/version "2.0.16"}
-        org.thymeleaf/thymeleaf {:mvn/version "3.1.2.RELEASE"}
+        org.postgresql/postgresql {:mvn/version "42.7.5"}
+        org.slf4j/jcl-over-slf4j {:mvn/version "2.0.17"}
+        org.slf4j/jul-to-slf4j {:mvn/version "2.0.17"}
+        org.slf4j/log4j-over-slf4j {:mvn/version "2.0.17"}
+        org.slf4j/slf4j-api {:mvn/version "2.0.17"}
+        org.thymeleaf/thymeleaf {:mvn/version "3.1.3.RELEASE"}
         ring-cors/ring-cors {:mvn/version "0.1.13"}
-        ring/ring-anti-forgery {:mvn/version "1.3.1"}}
+        ring/ring-anti-forgery {:mvn/version "1.4.0"}}
 
- :aliases {:build {:extra-deps {io.github.clojure/tools.build {:mvn/version "0.10.5"}}
+ :aliases {:build {:extra-deps {io.github.clojure/tools.build {:mvn/version "0.10.7"}}
                    :ns-default scripts.build}
 
            :dev {:extra-paths ["dev/src"]}
@@ -51,7 +51,7 @@
                   :extra-deps {; <--- allows for easy sorting, in vim, of the block below.
                                cheshire/cheshire {:mvn/version "5.13.0"}
                                com.gfredericks/test.chuck {:mvn/version "0.2.14"}
-                               com.github.seancorfield/expectations {:mvn/version "2.1.201"}
+                               com.github.seancorfield/expectations {:mvn/version "2.2.214"}
                                lambdaisland/kaocha {:mvn/version "1.91.1392"}
                                lambdaisland/kaocha-junit-xml {:mvn/version "1.17.101"}
                                orchestra/orchestra {:mvn/version "2021.01.01-1"}
@@ -59,8 +59,8 @@
                                pjstadig/humane-test-output {:mvn/version "0.11.0"}
                                ring/ring-mock {:mvn/version "0.4.0"}}}
 
-           :antq {:replace-deps {com.github.liquidz/antq {:mvn/version "2.10.1241"}
-                                 org.slf4j/slf4j-nop {:mvn/version "2.0.16"}}
+           :antq {:replace-deps {com.github.liquidz/antq {:mvn/version "2.11.1269"}
+                                 org.slf4j/slf4j-nop {:mvn/version "2.0.17"}}
                   :replace-paths ["."]
                   :exec-fn antq.tool/outdated
                   :exec-args {;;
