@@ -3,17 +3,15 @@
 #
 # The JRE_TAG can be passed in at build time.
 #
-ARG JRE_TAG=22-jre
+ARG JRE_TAG=23-jre
 #
 FROM eclipse-temurin:${JRE_TAG} AS stage1
 
 #
-# Add in curl as it is necessary to perform the healthcheck below
-#
-# Also add in a few more debugging tools that are *very* useful
-# in determining if the container can ping/access a remote port.
+# Add in a few debugging tools that are *very* useful in determining if the container can ping/access a remote port.
 #
 RUN apt-get update \
+    && apt-get upgrade -qq -y \
     && apt-get install -qq -y \
         curl \
         dnsutils \
@@ -44,9 +42,9 @@ FROM stage1 AS stage2
 #
 # Add in the Prometheus JMX Exporter for remote monitoring/diagnostics
 #
-ARG JMX_EXPORTER_VERSION=1.0.1
+ARG JMX_EXPORTER_VERSION=1.1.0
 #
-RUN wget --quiet https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/$JMX_EXPORTER_VERSION/jmx_prometheus_javaagent-$JMX_EXPORTER_VERSION.jar -O /tmp/jmx_prometheus_javaagent.jar
+RUN wget --quiet https://github.com/prometheus/jmx_exporter/releases/download/$JMX_EXPORTER_VERSION/jmx_prometheus_javaagent-$JMX_EXPORTER_VERSION.jar -O /tmp/jmx_prometheus_javaagent.jar
 
 #
 # Jump to Stage 3

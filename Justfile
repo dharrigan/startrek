@@ -31,7 +31,7 @@ build:
     bin/build
 
 # Create the Docker container
-imagify: build
+imagify:
     bin/imagify
 
 # Publish the Docker container

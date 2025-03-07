@@ -31,7 +31,7 @@
 (defn uberjar
   "This task will create the UberJAR in the `target` directory."
   [opts]
-  (spit "resources/version.txt" (b/git-process {:git-args "rev-parse --short=7 HEAD"}))
+  (spit "resources/version.txt" (b/git-process {:git-args "rev-parse --short=12 HEAD"}))
   (let [opts' (uber-opts opts)]
     (println (format "Cleaning '%s'..." target))
     (b/delete {:path "target"})
