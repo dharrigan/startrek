@@ -1,6 +1,6 @@
 {:paths ["src" "resources"]
 
- :deps {org.clojure/clojure {:mvn/version "1.12.1"}
+ :deps {org.clojure/clojure {:mvn/version "1.12.2"}
         ;;
         ;; And all the rest...
         ;;
@@ -16,11 +16,11 @@
         party.donut/system {:mvn/version "1.0.257"}
         com.github.seancorfield/honeysql {:mvn/version "2.7.1340"}
         com.github.seancorfield/next.jdbc {:mvn/version "1.3.1048"}
-        com.taoensso/encore {:mvn/version "3.152.0"}
+        com.taoensso/encore {:mvn/version "3.153.1"}
         com.taoensso/tempura {:mvn/version "1.5.4"}
-        com.zaxxer/HikariCP {:mvn/version "7.0.1"}
+        com.zaxxer/HikariCP {:mvn/version "7.0.2"}
         de.mkammerer/argon2-jvm {:mvn/version "2.12"}
-        info.sunng/ring-jetty9-adapter {:mvn/version "0.37.5"}
+        info.sunng/ring-jetty9-adapter {:mvn/version "0.37.6"}
         io.lettuce/lettuce-core {:mvn/version "6.8.0.RELEASE"}
         io.prometheus/simpleclient {:mvn/version "0.16.0"}
         io.prometheus/simpleclient_hotspot {:mvn/version "0.16.0"}
@@ -30,8 +30,8 @@
         metosin/reitit {:mvn/version "0.9.1" :exclusions [metosin/reitit-sieppari metosin/reitit-dev]}
         org.clojure/tools.cli {:mvn/version "1.1.230"}
         org.clojure/tools.logging {:mvn/version "1.3.0"}
-        org.flywaydb/flyway-core {:mvn/version "11.11.1"}
-        org.flywaydb/flyway-database-postgresql {:mvn/version "11.11.1"}
+        org.flywaydb/flyway-core {:mvn/version "11.11.2"}
+        org.flywaydb/flyway-database-postgresql {:mvn/version "11.11.2"}
         org.glassfish.external/opendmk_jmxremote_optional_jar {:mvn/version "1.0-b01-ea"}
         org.postgresql/postgresql {:mvn/version "42.7.7"}
         org.slf4j/jcl-over-slf4j {:mvn/version "2.0.17"}
