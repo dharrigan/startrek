@@ -3,6 +3,7 @@
   (:require
    [ring.util.response :as response]
    [startrek.core.aux.thymeleaf.interface :as thymeleaf]
+   [startrek.shared.constants :refer [internal-server-error]]
    [startrek.ui.utils.response :as response-utils]))
 
 (set! *warn-on-reflection* true)
@@ -14,13 +15,20 @@
         (response-utils/html)
         (response/status status))))
 
+(defn ^:private nil-error
+  [request]
+  (error request {:status internal-server-error :body "An unexpected exception has occured."}))
+
 (defn ^:private with-ui-exceptions
   [{:keys [tag] :as route-data} _]
   (when (= :ui tag)
     (fn [handler]
       (fn [request]
         (let [{:keys [status] :as response} (handler request)]
-          (if (< 400 status) (error request response) response))))))
+          (cond
+            (nil? status) (nil-error request)
+            (<= 400 status) (error request response)
+            :else response))))))
 
 (def ui-exceptions-middleware
   {:name ::ui-exceptions
