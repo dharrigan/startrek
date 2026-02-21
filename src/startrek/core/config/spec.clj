@@ -35,7 +35,6 @@
                              [:allow-methods {:default "CONNECT, DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT"} :string]]]
                      [:environment {:default :local} [:enum :local :test :development :staging :production]]
                      [:jetty {:default 8080} [:map [:port pos-int?]]]
-                     [:jmxmp {:default 5555} [:map [:port pos-int?]]]
                      [:thymeleaf [:map
                                   [:prefix {:default "public/"} :string]
                                   [:suffix {:default ".html"} :string]

@@ -7,7 +7,6 @@ services:
     ports:
       - "8080:8080"   # HTTP
       - "9080:9080"   # Prometheus JMX Exporter
-      - "5555:5555"   # JMXMP
     environment:
       # change the environment to suit your needs
       RUN_OPTS: "--environment example"  # use the example configuration, as it's configured to assume defaults

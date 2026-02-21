@@ -11,7 +11,7 @@
 
 (defn login
   []
-  (let [{:keys [body] :as response} @(http/post (str "http://localhost:8080/api/public/officers/login") {:basic-auth [riker password]})]
+  (let [{:keys [body] :as response} @(http/post "http://localhost:8080/api/public/officers/login" {:basic-auth [riker password]})]
     (-> (json/parse-string body true) :sessionId)))
 
 (def defiant
@@ -30,6 +30,6 @@
 (defn create-starship
   []
   (let [session-id (login)]
-    (create-request session-id (str "/api/private/starships"))))
+    (create-request session-id "/api/private/starships")))
 
 (create-starship)

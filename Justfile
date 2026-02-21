@@ -20,7 +20,7 @@ deps:
 
 # Checks (or formats) the source code
 format action="check" files="":
-    clojure -M:{{action}} {{files}}
+    clojure -M:format-{{action}} {{files}}
 
 # Test the application
 test:

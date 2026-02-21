@@ -9,7 +9,6 @@
    [startrek.core.cache.impl :as cache]
    [startrek.core.config.interface :as config]
    [startrek.core.database.impl :as db]
-   [startrek.core.jmxmp.impl :as jmxmp]
    [startrek.router :as router]))
 
 (set! *warn-on-reflection* true)
@@ -51,10 +50,6 @@
                                         :sessions-cache (ds/ref [:app-config :sessions-cache])
                                         :template-engine (ds/ref [:app-config :thymeleaf])}}
 
-                 :jmxmp #::ds{:start (fn [{:keys [::ds/config]}] (jmxmp/start config))
-                              :stop (fn [{:keys [::ds/instance]}] (jmxmp/stop instance))
-                              :config (ds/ref [:env :runtime-config :jmxmp])}
-
                  :thymeleaf #::ds{:start (fn [{:keys [::ds/config]}] (thymeleaf/start config))
                                   :config (ds/ref [:env :runtime-config :thymeleaf])}}}})
 
@@ -73,7 +68,6 @@
 (defmethod ds/named-system :test
   [_]
   (ds/system :base {[:env] (load-config :test)
-                    [:app-config :jmxmp] ::disabled
                     [:app-config :router] ::disabled
                     [:app-config :runtime-config] (ds/ref [:env :runtime-config])}))
 

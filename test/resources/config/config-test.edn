@@ -17,7 +17,6 @@
                   :cors {:allow-origin "http://localhost"}
                   :environment :local
                   :jetty {:port 8080}
-                  :jmxmp {:port 5555}
                   :thymeleaf {:prefix "public/"
                               :suffix ".html"
                               :cacheable? false

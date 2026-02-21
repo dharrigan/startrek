@@ -9,8 +9,7 @@
 
 (defn login
   []
-  (let [{:keys [body] :as response} @(http/post (str "http://localhost:8080/api/public/officers/login") {:basic-auth [riker password]
-                                                                                                         :headers {"accept-language" "pl"}})]
+  (let [{:keys [body] :as response} @(http/post "http://localhost:8080/api/public/officers/login" {:basic-auth [riker password] :headers {"accept-language" "pl"}})]
     (println body)))
 
 (login)

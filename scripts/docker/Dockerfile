@@ -3,7 +3,7 @@
 #
 # The JRE_TAG can be passed in at build time.
 #
-ARG JRE_TAG=23-jre
+ARG JRE_TAG=25-jre
 #
 FROM eclipse-temurin:${JRE_TAG} AS stage1
 
@@ -57,12 +57,7 @@ FROM stage2 AS stage3
 EXPOSE 8080
 
 #
-# JMXMP (see src/**/jmx.clj)
-#
-EXPOSE 5555
-
-#
-# JMX (not JMXMP! - that is started by the server - see src/**/jmx.clj)
+# JMX
 #
 EXPOSE 9010
 
@@ -83,7 +78,7 @@ ENV LC_ALL=en_GB.UTF-8
 ENV JVM_OPTS=""
 
 #
-# JMX port (not JMXMP! - that is started by the server - see src/**/jmx.clj)
+# JMX port
 #
 ENV JMX_PORT=9010
 
