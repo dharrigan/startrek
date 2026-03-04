@@ -2,13 +2,10 @@
   {:author "David Harrigan"}
   (:require
    [clojure.tools.logging :as log]
-   [jsonista.core :as json]
    [startrek.core.cache.interface :as cache]
    [startrek.shared.constants :refer [lcars-session]]))
 
 (set! *warn-on-reflection* true)
-
-(def ^:private keyword-mapper (json/object-mapper {:strip-nils true :decode-key-fn true}))
 
 (defn ^:private lookup-session-key-wildcard
   [{:keys [prefix session-id] :or {prefix lcars-session}} app-config]
@@ -25,8 +22,7 @@
 (defn get-session
   [{:keys [session-id] :as opts} app-config]
   (when-let [session (some-> (lookup-session-key-wildcard opts app-config)
-                             (cache/redis-get app-config)
-                             (json/read-value keyword-mapper))]
+                             (cache/redis-get app-config))]
     (log/tracef "Found session '%s' in the sessions cache." session-id)
     session))
 

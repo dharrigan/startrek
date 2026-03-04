@@ -7,8 +7,7 @@
                 :port 5432
                 :username "theborg"
                 :password "resistanceisfutile"}
-           :redis {:sessions {:uri "redis://redis/0"}}}
-
+           :redis {:sessions {:uri "redis://localhost/0"}}}
  :runtime-config {:db {:migration-locations ["db/migration/postgresql"]}
                   :cookies {:secure? false
                             :session-cookie-name "lcars-session"

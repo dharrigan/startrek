@@ -38,18 +38,15 @@
                            :stop (fn [{:keys [::ds/instance]}] (db/stop instance))
                            :config {:db (ds/ref [:env :secrets :db])
                                     :runtime-config (ds/ref [:env :runtime-config])}}
-
                  :sessions-cache #::ds{:start (fn [{:keys [::ds/config]}] (cache/start config))
                                        :stop (fn [{:keys [::ds/instance]}] (cache/stop instance))
                                        :config (ds/ref [:env :secrets :redis :sessions])}
-
                  :router #::ds{:start (fn [{:keys [::ds/config]}] (router/start config))
                                :stop (fn [{:keys [::ds/instance]}] (router/stop instance))
                                :config {:db (ds/ref [:app-config :db])
                                         :runtime-config (ds/ref [:env :runtime-config])
                                         :sessions-cache (ds/ref [:app-config :sessions-cache])
                                         :template-engine (ds/ref [:app-config :thymeleaf])}}
-
                  :thymeleaf #::ds{:start (fn [{:keys [::ds/config]}] (thymeleaf/start config))
                                   :config (ds/ref [:env :runtime-config :thymeleaf])}}}})
 

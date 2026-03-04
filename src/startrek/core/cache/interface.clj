@@ -5,7 +5,7 @@
 
 (set! *warn-on-reflection* true)
 
-(def ^:private two-weeks-in-ms (* 1000 60 60 24 14)) ;; 1209600000
+(def ^:private two-weeks-in-seconds (* 60 60 24 14)) ;; 1209600
 
 (defn redis-del
   [k app-config]
@@ -20,6 +20,6 @@
   (cache/redis-keys pattern app-config))
 
 (defn redis-put
-  ([k v app-config] (redis-put k v {:expiry-ms two-weeks-in-ms} app-config))
+  ([k v app-config] (redis-put k v {:expiry-seconds two-weeks-in-seconds} app-config))
   ([k v opts app-config]
    (cache/redis-put k v opts app-config)))

@@ -1,7 +1,6 @@
 (ns startrek.shared.middleware.sessions
   {:author "David Harrigan"}
   (:require
-   [jsonista.core :as json]
    [ring.middleware.session :refer [wrap-session]]
    [ring.middleware.session.store :refer [SessionStore]]
    [startrek.core.cache.interface :as cache]
@@ -11,7 +10,6 @@
 
 (set! *warn-on-reflection* true)
 
-(def ^:private keyword-mapper (json/object-mapper {:strip-nils true :decode-key-fn true}))
 (def ^:private max-age nil)
 (def ^:private lcars-token "lcars:token:")
 (def ^:private one-hour-in-ms (* 1000 60 60)) ;; 3600000
@@ -23,8 +21,7 @@
 
 (defn ^:private get-token
   [token-id app-config]
-  (-> (cache/redis-get (str lcars-token token-id) app-config)
-      (json/read-value keyword-mapper)))
+  (cache/redis-get (str lcars-token token-id) app-config))
 
 (defn ^:private save-token
   [token-id token app-config]
