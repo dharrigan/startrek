@@ -3,7 +3,7 @@
 ;;
 {:secrets {:db {:dbtype "postgresql"
                 :dbname "startrek"
-                :host "postgres"
+                :host "localhost"
                 :port 5432
                 :username "theborg"
                 :password "resistanceisfutile"}
